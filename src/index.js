@@ -4,13 +4,28 @@ import './index.css';
 import App from './App';
 import store from './app/store';
 import { Provider } from 'react-redux';
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import * as serviceWorker from './serviceWorker';
+
+const themeDark = createMuiTheme({
+  palette: {
+    type: 'dark',
+    primary: {
+      main: "#673ab7",
+    },
+    secondary: {
+      main: "#ffc400",
+    }
+  }
+});
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <MuiThemeProvider theme={themeDark}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </MuiThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
