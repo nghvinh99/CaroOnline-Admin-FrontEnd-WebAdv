@@ -2,11 +2,11 @@ import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
+import Copyright from '../Copyright';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
 import SignInForm from './SignInForm';
-import Copyright from '../Copyright';
 import { useStyles } from './style';
 
 export default function SignInPage() {
