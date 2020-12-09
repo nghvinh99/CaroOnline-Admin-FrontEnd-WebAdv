@@ -17,6 +17,10 @@ export default function Dashboard() {
           method: 'GET',
           withCredentials: true
         });
+        let date = new Date();
+        date.setTime(date.getTime() - (30 * 60 * 1000));
+        document.cookie = ('Authorization =; expires = ' + date.toGMTString() + '; path=/');
+        document.cookie = ('Login = false; expires= ' + date.toGMTString() + '; path=/');
         return res;
       } catch (err) {
         throw err;

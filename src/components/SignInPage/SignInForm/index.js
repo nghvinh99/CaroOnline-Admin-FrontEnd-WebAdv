@@ -10,7 +10,6 @@ import Alert from '@material-ui/lab/Alert';
 import { useState } from 'react';
 import { useStyles } from '../style';
 import { useHistory } from 'react-router-dom';
-import { Redirect } from "react-router-dom";
 
 export default function SignInForm() {
   const classes = useStyles();
@@ -44,6 +43,10 @@ export default function SignInForm() {
           withCredentials: true,
         });
         setWaiting(false);
+        let date = new Date();
+        date.setTime(date.getTime() + (30 * 60 * 1000));
+        document.cookie = ('Authorization = ' + res.data + '; expires = ' + date.toGMTString() + '; path = /');
+        document.cookie = ('Login = true; expires = ' + date.toGMTString() + '; path = /');
         const path = "/dashboard";
         history.push(path);
         return res;
