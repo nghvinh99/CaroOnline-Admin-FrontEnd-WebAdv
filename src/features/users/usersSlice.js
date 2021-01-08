@@ -23,8 +23,6 @@ const usersSlice = createSlice({
 
 export const { blockUser } = usersSlice.actions;
 
-export default usersSlice.reducer;
-
 export const selectAllUsers = state => state.users.users;
 
 export const selectUserById = (state, userId) => {
@@ -35,3 +33,5 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
   const response = await usersAPI.get(process.env.REACT_APP_API + '/users')
   return response.users;
 })
+
+export default usersSlice.reducer;

@@ -10,16 +10,15 @@ import Cookies from 'js-cookie';
 import { useState } from 'react';
 
 function App() {
-  const [auth, setAuth] = useState(Cookies.get('Login'));
+  const [auth, setAuth] = useState(localStorage.getItem('token'));
+  { console.log(auth); }
 
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
       <Router>
-        {/* <GuestRoute exact path="/auth/sign-in" component={SignInPage} />
+        <GuestRoute exact path="/auth/sign-in" component={SignInPage} />
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
-        <PrivateRoute exact path="/" component={Dashboard} /> */}
         <PrivateRoute exact path="/" component={Dashboard} />
-        <PrivateRoute exact path="/dashboard" component={Dashboard} />
         <PrivateRoute exact path="/dashboard/users" component={Dashboard} content={"Users"} />
       </Router>
     </AuthContext.Provider>

@@ -4,19 +4,25 @@ import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
-import Axios from 'axios';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Alert from '@material-ui/lab/Alert';
 import { useState } from 'react';
-import { useStyles } from '../styles';
 import { useHistory } from 'react-router-dom';
+import { adminLogin } from '../../../features/admin/adminSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useStyles } from '../styles';
 
 export default function SignInForm() {
   const classes = useStyles();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [waiting, setWaiting] = useState(false);
-  const [invalid, setInvalid] = useState(false);
+
+  const waiting = false;
+  const invalid = false;
+
+  const dispatch = useDispatch();
+  const adminStatus = useSelector(state => state.admin.status);
+
   const history = useHistory();
 
   const usernameInput = (e) => {
@@ -27,58 +33,19 @@ export default function SignInForm() {
     setPassword(e.target.value);
   }
 
-  const handleSubmit = (e) => {
-    setInvalid(false);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const user = {
       username: username,
       password: password
     }
-    const call = async function (next) {
-      setWaiting(true);
-      try {
-        const res = await Axios({
-          method: 'POST',
-          url: process.env.REACT_APP_API + '/auth/login',
-          data: user,
-          withCredentials: true,
-        });
-        setWaiting(false);
-        let date = new Date();
-        date.setTime(date.getTime() + (30 * 60 * 1000));
-        document.cookie = ('Authorization = ' + res.data + '; expires = ' + date.toGMTString() + '; path = /');
-        document.cookie = ('Login = true; expires = ' + date.toGMTString() + '; path = /');
-        const path = "/dashboard";
-        history.push(path);
-        return res;
-      } catch (err) {
-        if (err.response.status === 401) {
-          setInvalid(true);
-        }
-        setWaiting(false);
-        throw err;
+    if (adminStatus == 'idle') {
+      const resultLogin = await dispatch(adminLogin(user));
+      if (adminLogin.fulfilled.match(resultLogin)) {
+        history.push('/dashboard');
       }
     }
-    call();
-    e.preventDefault();
   }
-
-  // const handleTest = () => {
-  //   const call = async function () {
-  //     setWaiting(true);
-  //     try {
-  //       const res = await Axios({
-  //         method: 'GET',
-  //         url: process.env.REACT_APP_API + '/auth/test',
-  //         withCredentials: true,
-  //       });
-  //       setWaiting(false);
-  //       return res;
-  //     } catch (err) {
-  //       throw err;
-  //     }
-  //   }
-  //   call();
-  // }
 
   return (
     <form className={classes.form} onSubmit={handleSubmit}>
@@ -109,14 +76,6 @@ export default function SignInForm() {
       >
         Sign In
       </Button>
-
-      {/* <Button
-        fullWidth variant="contained"
-        color="primary" className={classes.submit}
-        onClick={handleTest}
-      >
-        Test
-      </Button> */}
 
       <Grid container>
         <Grid item xs>

@@ -7,9 +7,9 @@ export default function PrivateRoute({ component: Component, ...rest }) {
   const { auth } = useAuth();
   const history = useHistory();
 
-  // if (!auth) {
-  //   history.push('/auth/sign-in');
-  // }
+  if (!auth) {
+    history.push('/auth/sign-in');
+  }
   return (
     <Route {...rest} render={props =>
       <Component {...props} />

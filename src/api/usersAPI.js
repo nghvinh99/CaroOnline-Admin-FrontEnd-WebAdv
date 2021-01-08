@@ -6,9 +6,11 @@ export const usersAPI = {
       const res = await Axios({
         method: 'GET',
         url: path,
-        withCredentials: true,
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token')
+        }
       });
-      return res;
+      return res.data;
     } catch (err) {
       throw err;
     }
