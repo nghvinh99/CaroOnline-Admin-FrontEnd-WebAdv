@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import NavBar from './NavBar';
 import Chart from './Chart';
 import Deposits from './Deposits';
-import Orders from './Orders';
+import Users from '../Users';
 import { useStyles } from './styles';
 
 export default function Dashboards() {
@@ -24,21 +24,21 @@ export default function Dashboards() {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             {/* Chart */}
-            <Grid item xs={12} md={8} lg={9}>
+            {/* <Grid item xs={12} md={8} lg={9}>
               <Paper className={fixedHeightPaper}>
                 <Chart />
               </Paper>
-            </Grid>
+            </Grid> */}
             {/* Recent Deposits */}
-            <Grid item xs={12} md={4} lg={3}>
+            {/* <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
                 <Deposits />
               </Paper>
-            </Grid>
+            </Grid> */}
             {/* Recent Orders */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Orders />
+                <Users />
               </Paper>
             </Grid>
           </Grid>
