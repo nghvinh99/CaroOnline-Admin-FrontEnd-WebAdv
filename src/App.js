@@ -15,9 +15,12 @@ function App() {
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
       <Router>
-        <GuestRoute exact path="/auth/sign-in" component={SignInPage} />
+        {/* <GuestRoute exact path="/auth/sign-in" component={SignInPage} />
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
+        <PrivateRoute exact path="/" component={Dashboard} /> */}
         <PrivateRoute exact path="/" component={Dashboard} />
+        <PrivateRoute exact path="/dashboard" component={Dashboard} />
+        <PrivateRoute exact path="/dashboard/users" component={Dashboard} content={"Users"} />
       </Router>
     </AuthContext.Provider>
   );

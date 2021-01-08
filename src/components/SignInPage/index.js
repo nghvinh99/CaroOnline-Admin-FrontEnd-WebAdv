@@ -7,7 +7,7 @@ import Copyright from '../Copyright';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import SignInForm from './SignInForm';
-import { useStyles } from './style';
+import { useStyles } from './styles';
 
 export default function SignInPage() {
   const classes = useStyles();

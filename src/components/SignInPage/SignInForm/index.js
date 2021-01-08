@@ -8,7 +8,7 @@ import Axios from 'axios';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Alert from '@material-ui/lab/Alert';
 import { useState } from 'react';
-import { useStyles } from '../style';
+import { useStyles } from '../styles';
 import { useHistory } from 'react-router-dom';
 
 export default function SignInForm() {

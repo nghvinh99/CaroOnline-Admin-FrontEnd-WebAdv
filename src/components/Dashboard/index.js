@@ -5,6 +5,7 @@ import Copyright from '../Copyright';
 import Button from '@material-ui/core/Button';
 import Axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import Dashboards from './Dashboard';
 
 export default function Dashboard() {
   const history = useHistory();
@@ -32,15 +33,16 @@ export default function Dashboard() {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div>Dashboard</div>
-      <Button onClick={handleLogout}>
-        Log out
-      </Button>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
-    </Container>
+    // <Container component="main" maxWidth="xs">
+    //   <CssBaseline />
+    //   <div>Dashboard</div>
+    //   <Button onClick={handleLogout}>
+    //     Log out
+    //   </Button>
+    //   <Box mt={8}>
+    //     <Copyright />
+    //   </Box>
+    <Dashboards />
+    // {/* </Container> */ }
   )
 }
