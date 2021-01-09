@@ -21,7 +21,7 @@ import { useHistory } from 'react-router-dom';
 import Divider from '@material-ui/core/Divider';
 import { selectDrawer, openNavBar, closeNavBar } from '../../features/drawer/drawerSlice';
 import { useSelector, useDispatch } from 'react-redux';
-import { useStyles } from './styles';
+import { useStyles } from '../Dashboard/styles';
 
 export default function NavBar() {
   const classes = useStyles();

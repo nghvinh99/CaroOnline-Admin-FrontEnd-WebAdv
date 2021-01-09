@@ -4,9 +4,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import NavBar from './NavBar';
-import Chart from './Chart';
-import Deposits from './Deposits';
+import NavBar from '../NavBar';
 import Users from '../Users';
 import { useStyles } from './styles';
 

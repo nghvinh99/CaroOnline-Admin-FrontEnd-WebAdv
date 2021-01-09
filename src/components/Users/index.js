@@ -1,89 +1,97 @@
 import React from 'react';
-import { useEffect } from 'react';
-import Link from '@material-ui/core/Link';
+import { useEffect, useState } from 'react';
 import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableHead from '@material-ui/core/TableHead';
 import Title from '../Dashboard/Title';
+import Filter from '../Filter';
+import UsersList from './UsersList';
+import Paper from '@material-ui/core/Paper';
+import TableContainer from '@material-ui/core/TableContainer';
+import Box from '@material-ui/core/Box'
+import TablePagination from '@material-ui/core/TablePagination';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectAllUsers, fetchUsers } from '../../features/users/usersSlice';
+import { selectFilter, selectAllUsers, fetchUsers } from '../../features/users/usersSlice';
 import { useStyles } from './styles';
-
-// Generate Order Data
-function createData(id, date, name, shipTo, paymentMethod, amount) {
-  return { id, date, name, shipTo, paymentMethod, amount };
-}
-
-const rows = [
-  createData(0, '16 Mar, 2019', 'Elvis Presley', 'Tupelo, MS', 'VISA ⠀•••• 3719', 312.44),
-  createData(1, '16 Mar, 2019', 'Paul McCartney', 'London, UK', 'VISA ⠀•••• 2574', 866.99),
-  createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 100.81),
-  createData(3, '16 Mar, 2019', 'Michael Jackson', 'Gary, IN', 'AMEX ⠀•••• 2000', 654.39),
-  createData(4, '15 Mar, 2019', 'Bruce Springsteen', 'Long Branch, NJ', 'VISA ⠀•••• 5919', 212.79),
-];
-
-function preventDefault(event) {
-  event.preventDefault();
-}
-
 
 export default function Orders() {
   const classes = useStyles();
-
   const dispatch = useDispatch();
+  const filter = useSelector(selectFilter);
   const users = useSelector(selectAllUsers);
-
   const userStatus = useSelector(state => state.users.status);
-
-  const handleClick = (event) => {
-    event.preventDefault();
-    console.log(users);
-  }
 
   useEffect(() => {
     if (userStatus === 'idle') {
-      dispatch(fetchUsers());
+      dispatch(fetchUsers(filter));
     }
-  }, [userStatus, dispatch]);
+  }, [userStatus, dispatch, filter]);
 
-  console.log(users);
+  const rowsOpts = [10, 20, 50, 100];
+  const [rows, setRows] = useState(10);
+  const [page, setPage] = useState(0);
+
+  const handleChangePage = (event, page) => {
+    setPage(page);
+  }
+
+  const handleChangeRows = (event) => {
+    setRows(event.target.value);
+    setPage(0);
+  }
 
   return (
     <React.Fragment>
       <Title>Users</Title>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>STT</TableCell>
-            <TableCell>ID</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell align="right">Win Rate</TableCell>
-            <TableCell align="center">Point</TableCell>
-            <TableCell align="center">Rank</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {users.map((row, index) => (
-            <TableRow key={row.id}>
-              <TableCell>{index + 1}</TableCell>
-              <TableCell>{row.id}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.email}</TableCell>
-              <TableCell align="right">{row.percent_win * 100} %</TableCell>
-              <TableCell align="center">{row.point}</TableCell>
-              <TableCell align="center">{row.rank}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <div className={classes.seeMore}>
-        <Link color="primary" href="#" onClick={handleClick}>
-          See more orders
-        </Link>
-      </div>
+      <Filter />
+      <Paper className={classes.root}>
+        <TableContainer className={classes.container}>
+          <Table size="small" stickyHeader >
+            <colgroup>
+              <col style={{ width: '5%' }} />
+              <col style={{ width: '5%' }} />
+              <col style={{ width: '25%' }} />
+              <col style={{ width: '25%' }} />
+              <col style={{ width: '5%' }} />
+              <col style={{ width: '5%' }} />
+              <col style={{ width: '5%' }} />
+              <col style={{ width: '10%' }} />
+              <col style={{ width: '10%' }} />
+              <col style={{ width: '5%' }} />
+            </colgroup>
+            <TableHead>
+              <TableRow>
+                <TableCell>STT</TableCell>
+                <TableCell>ID</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell align="center">Point</TableCell>
+                <TableCell align="center">Total match</TableCell>
+                <TableCell align="center">Total win</TableCell>
+                <TableCell align="right">Win Rate</TableCell>
+                <TableCell align="center">Rank</TableCell>
+                <TableCell align="center">Blocked</TableCell>
+              </TableRow>
+            </TableHead>
+            <UsersList
+              users={users.slice(page * rows, page * rows + rows)}
+              page={page}
+              rows={rows}
+            />
+          </Table>
+        </TableContainer>
+        <Box display="flex" justifyContent="flex-end" m={1} p={1} bgcolor="background.paper">
+          <TablePagination
+            rowsPerPageOptions={rowsOpts}
+            rowsPerPage={rows}
+            onChangeRowsPerPage={handleChangeRows}
+            count={users.length}
+            page={page}
+            onChangePage={handleChangePage}
+          />
+        </Box>
+      </Paper>
     </React.Fragment>
   );
 }
