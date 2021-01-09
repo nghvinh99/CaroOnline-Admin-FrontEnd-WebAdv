@@ -11,7 +11,6 @@ import { useState } from 'react';
 
 function App() {
   const [auth, setAuth] = useState(localStorage.getItem('token'));
-  { console.log(auth); }
 
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>

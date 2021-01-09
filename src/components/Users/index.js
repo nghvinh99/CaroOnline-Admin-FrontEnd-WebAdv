@@ -37,11 +37,18 @@ export default function Orders() {
 
   const userStatus = useSelector(state => state.users.status);
 
+  const handleClick = (event) => {
+    event.preventDefault();
+    console.log(users);
+  }
+
   useEffect(() => {
     if (userStatus === 'idle') {
-      dispatch(fetchUsers())
+      dispatch(fetchUsers());
     }
   }, [userStatus, dispatch]);
+
+  console.log(users);
 
   return (
     <React.Fragment>
@@ -53,25 +60,27 @@ export default function Orders() {
             <TableCell>ID</TableCell>
             <TableCell>Name</TableCell>
             <TableCell>Email</TableCell>
-            <TableCell>Win Rate</TableCell>
-            <TableCell>Point</TableCell>
-            <TableCell>Rank</TableCell>
+            <TableCell align="right">Win Rate</TableCell>
+            <TableCell align="center">Point</TableCell>
+            <TableCell align="center">Rank</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {users.map((row, index) => (
             <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>{row.id}</TableCell>
               <TableCell>{row.name}</TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell align="right">{row.amount}</TableCell>
+              <TableCell>{row.email}</TableCell>
+              <TableCell align="right">{row.percent_win * 100} %</TableCell>
+              <TableCell align="center">{row.point}</TableCell>
+              <TableCell align="center">{row.rank}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
       <div className={classes.seeMore}>
-        <Link color="primary" href="#" onClick={preventDefault}>
+        <Link color="primary" href="#" onClick={handleClick}>
           See more orders
         </Link>
       </div>
