@@ -4,7 +4,7 @@ import Table from '@material-ui/core/Table';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
-import Title from '../Dashboard/Title';
+import Title from '../Title';
 import Filter from '../Filter';
 import UsersList from './UsersList';
 import Paper from '@material-ui/core/Paper';
@@ -22,15 +22,17 @@ export default function Orders() {
   const users = useSelector(selectAllUsers);
   const userStatus = useSelector(state => state.users.status);
 
-  useEffect(() => {
-    if (userStatus === 'idle') {
-      dispatch(fetchUsers(filter));
-    }
-  }, [userStatus, dispatch, filter]);
-
   const rowsOpts = [10, 20, 50, 100];
   const [rows, setRows] = useState(10);
   const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    if (userStatus === 'idle') {
+      dispatch(fetchUsers(filter));
+      setPage(0);
+    }
+  }, [userStatus, dispatch, filter]);
+
 
   const handleChangePage = (event, page) => {
     setPage(page);

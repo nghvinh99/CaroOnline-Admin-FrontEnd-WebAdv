@@ -1,48 +1,35 @@
+import React from 'react';
+import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
-import Copyright from '../Copyright';
-import Button from '@material-ui/core/Button';
-import Axios from 'axios';
-import { useHistory } from 'react-router-dom';
-import Dashboards from './Dashboard';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import NavBar from '../NavBar';
+import Users from '../Users';
+import UserDetails from '../Users/UserDetails';
+import { useStyles } from './styles';
 
 export default function Dashboard() {
-  const history = useHistory();
+  const classes = useStyles();
 
-  const handleLogout = () => {
-    const call = async function () {
-      try {
-        const res = await Axios({
-          url: process.env.REACT_APP_API + '/auth/logout',
-          method: 'GET',
-          withCredentials: true
-        });
-        let date = new Date();
-        date.setTime(date.getTime() + (1 * 1000));
-        document.cookie = ('Authorization = ; expires = ' + date.toGMTString() + '; path = /');
-        document.cookie = ('Login = false; expires = ' + date.toGMTString() + '; path = /');
-        return res;
-      } catch (err) {
-        throw err;
-      }
-    }
-    call();
-    const path = '/auth/sign-in';
-    history.push(path);
-  }
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
-    // <Container component="main" maxWidth="xs">
-    //   <CssBaseline />
-    //   <div>Dashboard</div>
-    //   <Button onClick={handleLogout}>
-    //     Log out
-    //   </Button>
-    //   <Box mt={8}>
-    //     <Copyright />
-    //   </Box>
-    <Dashboards />
-    // {/* </Container> */ }
-  )
+    <div className={classes.root}>
+      <CssBaseline />
+      <NavBar />
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        <Container maxWidth="lg" className={classes.container}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Paper className={classes.paper}>
+                <UserDetails />
+              </Paper>
+            </Grid>
+          </Grid>
+        </Container>
+      </main>
+    </div>
+  );
 }

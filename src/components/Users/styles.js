@@ -7,4 +7,7 @@ export const useStyles = makeStyles((theme) => ({
   container: {
     maxHeight: 500,
   },
+  tableRow: {
+    cursor: 'pointer',
+  }
 }));
