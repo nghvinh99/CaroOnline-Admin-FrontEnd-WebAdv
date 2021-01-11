@@ -24,7 +24,9 @@ export default function Dashboard() {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <UserDetails />
+                <UserDetails
+                  userId={67}
+                />
               </Paper>
             </Grid>
           </Grid>

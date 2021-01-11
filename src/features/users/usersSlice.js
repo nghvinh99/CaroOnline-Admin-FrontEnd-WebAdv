@@ -14,8 +14,20 @@ const initialState = {
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async (filter, { rejectWithValue }) => {
   try {
-    const response = await usersAPI.get(process.env.REACT_APP_API + '/users', filter);
+    const response = await usersAPI.get(filter);
     return response;
+  } catch (err) {
+    if (!err.response) {
+      throw err;
+    }
+    return rejectWithValue(err.response.data);
+  }
+})
+
+export const blockUsers = createAsyncThunk('users/blockUser', async (rejectWithValue) => {
+  try {
+    const reponse = await usersAPI.block(userId);
+    console.log(response);
   } catch (err) {
     if (!err.response) {
       throw err;
@@ -57,9 +69,7 @@ export const { blockUser, usersFilter, changePage } = usersSlice.actions;
 
 export const selectAllUsers = state => state.users.users;
 
-export const selectUserById = (state, userId) => {
-  state.users.users.find(user => user.id === userId);
-}
+export const selectUserById = (state, userId) => state.users.users.find(user => user.id === userId);
 
 export const selectUsersFields = state => {
   const user = state.users.users[0]

@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/';
+import { red } from '@material-ui/core/colors';
 
 export const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,4 +39,21 @@ export const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
     marginLeft: theme.spacing(1),
   },
+  card: {
+    maxWidth: 400,
+  },
+  media: {
+    height: 0,
+    paddingTop: '56.25%', // 16:9
+  },
+  avatar: {
+    backgroundColor: red[500],
+  },
+  textField: {
+    margin: theme.spacing(1),
+  },
+  checkbox: {
+    margin: theme.spacing(1),
+    float: "right",
+  }
 }))
