@@ -20,6 +20,8 @@ function App() {
         <PrivateRoute exact path="/" component={Dashboard} />
         <PrivateRoute exact path="/dashboard/users" component={Dashboard} content={"Users"} />
         <PrivateRoute exact path="/dashboard/users/:id" component={Dashboard} content={"UserDetails"} />
+        <PrivateRoute exact path="/dashboard/history" component={Dashboard} content={"UserDetails"} />
+        <PrivateRoute exact path="/dashboard/history/boards/:id" component={Dashboard} content={"UserDetails"} />
       </Router>
     </AuthContext.Provider>
   );

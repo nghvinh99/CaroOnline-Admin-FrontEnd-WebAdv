@@ -16,12 +16,15 @@ export const usersAPI = {
       throw err;
     }
   },
-  block: async function (userId) {
+  flipStatus: async function (userId) {
     try {
+      const user = {
+        userId: userId
+      }
       const res = await Axios({
         method: 'GET',
         url: process.env.REACT_APP_API + '/users/block',
-        params: filter,
+        params: user,
         headers: {
           Authorization: 'Bearer' + localStorage.getItem('token')
         }

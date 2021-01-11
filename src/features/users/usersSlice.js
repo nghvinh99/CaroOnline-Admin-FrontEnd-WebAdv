@@ -24,10 +24,10 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async (filter, { 
   }
 })
 
-export const blockUsers = createAsyncThunk('users/blockUser', async (rejectWithValue) => {
+export const flipUserStatus = createAsyncThunk('users/flipUserStatus', async (userId, { rejectWithValue }) => {
   try {
-    const reponse = await usersAPI.block(userId);
-    console.log(response);
+    const response = await usersAPI.flipStatus(userId);
+    return response;
   } catch (err) {
     if (!err.response) {
       throw err;
@@ -40,13 +40,6 @@ const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
-    blockUser: (state, action) => {
-      const userId = action.payload;
-      const user = state.users.find((user) => user.id === userId);
-      if (user) {
-        user.status = false;
-      }
-    },
     usersFilter: (state, action) => {
       const filter = action.payload;
       return {
@@ -54,6 +47,15 @@ const usersSlice = createSlice({
         filter: filter
       }
     },
+    updateUserStatus: (state, action) => {
+      const userId = action.payload;
+      const users = state.users.map(user => {
+        if (user.id === userId) {
+          user.status = 1 - user.status;
+        }
+        return user;
+      })
+    }
   },
   extraReducers: {
     [fetchUsers.fulfilled]: (state, action) => {
@@ -61,11 +63,16 @@ const usersSlice = createSlice({
         ...state,
         users: action.payload,
       }
+    },
+    [flipUserStatus.fulfilled]: (state, action) => {
+      return {
+        ...state
+      }
     }
   }
 })
 
-export const { blockUser, usersFilter, changePage } = usersSlice.actions;
+export const { usersFilter, updateUserStatus } = usersSlice.actions;
 
 export const selectAllUsers = state => state.users.users;
 

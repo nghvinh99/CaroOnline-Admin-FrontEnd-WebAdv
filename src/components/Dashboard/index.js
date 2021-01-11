@@ -7,12 +7,12 @@ import Paper from '@material-ui/core/Paper';
 import NavBar from '../NavBar';
 import Users from '../Users';
 import UserDetails from '../Users/UserDetails';
+import History from '../History';
+import HistoryDetails from '../History/HistoryDetails'
 import { useStyles } from './styles';
 
 export default function Dashboard() {
   const classes = useStyles();
-
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
@@ -24,9 +24,7 @@ export default function Dashboard() {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <UserDetails
-                  userId={67}
-                />
+                <HistoryDetails />
               </Paper>
             </Grid>
           </Grid>

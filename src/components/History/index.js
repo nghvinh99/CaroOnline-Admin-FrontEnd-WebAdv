@@ -6,21 +6,21 @@ import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
 import Title from '../Title';
 import Filter from '../Filter';
-import UsersList from './UsersList';
+import HistoryList from './HistoryList';
 import Paper from '@material-ui/core/Paper';
 import TableContainer from '@material-ui/core/TableContainer';
 import Box from '@material-ui/core/Box'
 import TablePagination from '@material-ui/core/TablePagination';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectFilter, selectAllUsers, fetchUsers } from '../../features/users/usersSlice';
+import { selectFilter, selectAllHistory, fetchHistory } from '../../features/history/historySlice';
 import { useStyles } from './styles';
 
-export default function Orders() {
+export default function History() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const filter = useSelector(selectFilter);
-  const users = useSelector(selectAllUsers);
-  const apiState = useSelector(state => state.users.status);
+  const history = useSelector(selectAllHistory);
+  const apiState = useSelector(state => state.history.status);
 
   const rowsOpts = [10, 20, 50, 100];
   const [rows, setRows] = useState(10);
@@ -28,7 +28,7 @@ export default function Orders() {
 
   useEffect(() => {
     if (apiState === 'idle') {
-      dispatch(fetchUsers(filter));
+      dispatch(fetchHistory(filter));
       setPage(0);
     }
   }, [apiState, dispatch, filter]);
@@ -45,39 +45,31 @@ export default function Orders() {
 
   return (
     <React.Fragment>
-      <Title>Users</Title>
+      <Title>History</Title>
       <Filter />
       <Paper className={classes.root}>
         <TableContainer className={classes.container}>
           <Table size="small" stickyHeader >
             <colgroup>
-              <col style={{ width: '5%' }} />
-              <col style={{ width: '5%' }} />
-              <col style={{ width: '25%' }} />
-              <col style={{ width: '25%' }} />
-              <col style={{ width: '5%' }} />
-              <col style={{ width: '5%' }} />
-              <col style={{ width: '5%' }} />
-              <col style={{ width: '10%' }} />
-              <col style={{ width: '10%' }} />
-              <col style={{ width: '5%' }} />
+              <col style={{ width: '15%' }} />
+              <col style={{ width: '15%' }} />
+              <col style={{ width: '15%' }} />
+              <col style={{ width: '15%' }} />
+              <col style={{ width: '15%' }} />
+              <col style={{ width: '15%' }} />
             </colgroup>
             <TableHead>
               <TableRow>
                 <TableCell>STT</TableCell>
                 <TableCell>ID</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell align="center">Point</TableCell>
-                <TableCell align="center">Total match</TableCell>
-                <TableCell align="center">Total win</TableCell>
-                <TableCell align="right">Win Rate</TableCell>
-                <TableCell align="center">Rank</TableCell>
-                <TableCell align="center">Blocked</TableCell>
+                <TableCell>Board</TableCell>
+                <TableCell>Winner</TableCell>
+                <TableCell>Loser</TableCell>
+                <TableCell>Win type</TableCell>
               </TableRow>
             </TableHead>
-            <UsersList
-              users={users.slice(page * rows, page * rows + rows)}
+            <HistoryList
+              histories={history.slice(page * rows, page * rows + rows)}
               page={page}
               rows={rows}
             />
@@ -88,7 +80,7 @@ export default function Orders() {
             rowsPerPageOptions={rowsOpts}
             rowsPerPage={rows}
             onChangeRowsPerPage={handleChangeRows}
-            count={users.length}
+            count={history.length}
             page={page}
             onChangePage={handleChangePage}
           />

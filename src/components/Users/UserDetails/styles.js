@@ -51,6 +51,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   textField: {
     margin: theme.spacing(1),
+    width: "45%"
   },
   checkbox: {
     margin: theme.spacing(1),

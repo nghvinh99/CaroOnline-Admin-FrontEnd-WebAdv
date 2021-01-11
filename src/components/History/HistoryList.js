@@ -12,8 +12,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { flipUserStatus, updateUserStatus } from '../../features/users/usersSlice';
 import { useHistory } from 'react-router-dom';
 import { useStyles } from './styles';
+import { historyAPI } from '../../api/historyAPI';
 
-export default function UsersList({ users, page, rows }) {
+export default function HistoryList({ histories, page, rows }) {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -39,9 +40,17 @@ export default function UsersList({ users, page, rows }) {
     handleClose();
   }
 
-  const handleClick = (id) => {
+  const handleClickUser = (id) => {
     const path = "/dashboard/users/" + id;
     history.push(path);
+  }
+
+  const handleClick = (id) => {
+    const path = "/dashboard/boards/" + id;
+    history.push(path);
+  }
+  const handleClick1 = (row) => {
+    console.log(row.data[0]);
   }
 
   return (
@@ -51,25 +60,14 @@ export default function UsersList({ users, page, rows }) {
         cancel={handleClose}
         confirm={() => handleConfirm(currentId)}
       />
-      {users.map((user, index) => (
-        <TableRow key={user.id} hover>
-          <TableCell className={classes.tableCell} onClick={() => handleClick(user.id)}>{page * rows + index + 1}</TableCell>
-          <TableCell className={classes.tableCell} onClick={() => handleClick(user.id)}>{user.id}</TableCell>
-          <TableCell className={classes.tableCell} onClick={() => handleClick(user.id)}>{user.name}</TableCell>
-          <TableCell className={classes.tableCell} onClick={() => handleClick(user.id)}>{user.email}</TableCell>
-          <TableCell align="center">{user.point}</TableCell>
-          <TableCell align="center">{user.total_match}</TableCell>
-          <TableCell align="center">{user.total_win}</TableCell>
-          <TableCell align="right">{user.percent_win * 100} %</TableCell>
-          <TableCell align="center">{user.rank}</TableCell>
-          <TableCell align="right">
-            <FormControlLabel
-              checked={(user.status == 1) ? false : true}
-              onChange={() => handleClickOpen(user.id)}
-              control={<Checkbox icon={<LockOpenIcon />}
-                checkedIcon={<LockIcon />} />}
-            />
-          </TableCell>
+      {histories.map((row, index) => (
+        <TableRow key={row.id} hover>
+          <TableCell className={classes.tableCell} onClick={() => handleClick1(row)}>{page * rows + index + 1}</TableCell>
+          <TableCell className={classes.tableCell} onClick={() => handleClick(row.id)}>{row.id}</TableCell>
+          <TableCell className={classes.tableCell} onClick={() => handleClick(row.id)}>{row.board}</TableCell>
+          <TableCell className={classes.tableCell} onClick={() => handleClickUser(row.winner)}>{row.winner}</TableCell>
+          <TableCell className={classes.tableCell} onClick={() => handleClickUser(row.loser)}>{row.loser}</TableCell>
+          <TableCell className={classes.tableCell} onClick={() => handleClick(row.id)}>{row.type}</TableCell>
         </TableRow >
       ))
       }
