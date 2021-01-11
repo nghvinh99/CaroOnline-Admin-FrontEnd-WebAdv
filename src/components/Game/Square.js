@@ -8,8 +8,7 @@ function Square({ highlight, onClick, value }) {
 
   return (
     <Button variant="contained" className={classes.square}
-      style={{ 'color': highlight ? 'red' : 'black' }}
-      onClick={onClick}>
+      style={{ 'color': highlight ? 'red' : 'black' }}>
       {value}
     </Button>
   );

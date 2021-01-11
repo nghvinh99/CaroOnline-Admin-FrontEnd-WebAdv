@@ -78,18 +78,6 @@ export const selectAllUsers = state => state.users.users;
 
 export const selectUserById = (state, userId) => state.users.users.find(user => user.id === userId);
 
-export const selectUsersFields = state => {
-  const user = state.users.users[0]
-  if (user) {
-    const fields = Object.keys(user);
-    delete fields.avatar;
-    delete fields.account_type;
-    delete fields.created_at;
-    return fields;
-  }
-  return [];
-}
-
 export const selectFilter = state => state.users.filter;
 
 export default usersSlice.reducer;

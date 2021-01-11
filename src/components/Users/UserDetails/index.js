@@ -6,7 +6,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 import ProfileImage from './ProfileImage';
 import Title from '../../Title';
 import ConfirmDialog from '../../ConfirmDialog';
-import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { flipUserStatus, selectUserById, updateUserStatus, } from '../../../features/users/usersSlice';
 import { useStyles } from './styles';

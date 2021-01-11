@@ -17,5 +17,8 @@ export const useStyles = makeStyles((theme) => ({
     maxHeight: 200,
     overflow: 'auto',
     width: '100%'
+  },
+  chatItem: {
+    marginTop: '-5px'
   }
 }));

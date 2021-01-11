@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Board from './Board';
 import OrderToggleButton from './OrderToggleButton';
 import calculateWinner from './service';
@@ -6,42 +6,39 @@ import ListItem from './ListItem';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchGameData, selectGameData } from '../../features/history/historySlice';
+import ChatItem from './ChatItem';
 import { useStyles } from './styles';
 
 function Game() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const apiStatus = useSelector(state => state.history.status);
+  const gameData = useSelector(selectGameData);
 
   const tableSize = 20;
-  const [history, setHistory] = useState([{
-    squares: Array(Math.pow(tableSize, 2)).fill(null),
-    index: null,
-    winner: null,
-  }]);
-  const [stepNumber, setStepNumber] = useState(0);
+  const [stepNumber, setStepNumber] = useState(2);
   const [xIsNext, setXIsNext] = useState(true);
   const [descending, setDescending] = useState(false);
 
-  const current = history[stepNumber];
-  const winner = calculateWinner(current.squares, tableSize, current.index);
+  useEffect(() => {
+    if (apiStatus === 'idle') {
+      dispatch(fetchGameData(1));
+    }
+  }, [apiStatus, dispatch]);
+
+  if (!gameData.data) {
+    return (<>OK</>);
+  }
+
+
+  const current = gameData.data[stepNumber];
+  // const winner = calculateWinner(current.squares, tableSize, current.index);
   const highlight = Array(Math.pow(tableSize, 2)).fill(null);
 
   const handleClick = (i) => {
-    const newHistory = history.slice(0, stepNumber + 1);
-    const current = newHistory[newHistory.length - 1];
-    const squares = current.squares.slice();
 
-    if (current.winner || squares[i]) {
-      return;
-    }
-
-    squares[i] = xIsNext ? 'X' : 'O';
-    setHistory(newHistory.concat([{
-      squares: squares,
-      index: i,
-      winner: current.winner,
-    }]))
-    setStepNumber(newHistory.length);
-    setXIsNext(!xIsNext);
   }
 
   const handleChange = () => {
@@ -57,12 +54,23 @@ function Game() {
     return (!squares.includes(null));
   }
 
+  let chatList = [];
+  const chat = gameData.chat.slice();
+  chat.map((step, move) => {
+    chatList.push(
+      <ChatItem
+        senderId={step.idSender}
+        message={step.message}
+      />
+    );
+    return chatList;
+  })
+
   let moveList = [];
-  const list = history.slice();
+  const list = gameData.data.slice();
   list.map((step, move) => {
     const desc = move ?
-      'Go to position (' + (Math.floor(step.index / tableSize) + 1) + ', '
-      + (step.index % tableSize + 1) + ')'
+      'Go to position (' + step.x + ', ' + step.y + ')'
       : 'Go to game start';
     moveList.push(
       <ListItem
@@ -80,12 +88,14 @@ function Game() {
   }
 
   let status;
-  if (winner.winner) {
-    current.winner = winner.winner;
-    status = 'Winner: ' + winner.winner;
-    winner.line.forEach(i => {
-      highlight[i] = true;
-    })
+  // if (winner.winner) {
+  //   current.winner = winner.winner;
+  //   status = 'Winner: ' + winner.winner;
+  //   winner.line.forEach(i => {
+  //     highlight[i] = true;
+  //   })
+  if (1 === 2) {
+    return;
   } else if (checkDraw(current.squares)) {
     status = 'Game draw!';
   } else {
@@ -128,7 +138,7 @@ function Game() {
             Chat:
           </Typography>
           <List className={classes.moveList}>
-            {moveList}
+            {chatList}
           </List>
         </Grid>
       </Grid>
