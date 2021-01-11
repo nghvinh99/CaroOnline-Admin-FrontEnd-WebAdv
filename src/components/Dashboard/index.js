@@ -1,5 +1,4 @@
-import React from 'react';
-import clsx from 'clsx';
+import React, { useState } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -8,10 +7,10 @@ import NavBar from '../NavBar';
 import Users from '../Users';
 import UserDetails from '../Users/UserDetails';
 import History from '../History';
-import HistoryDetails from '../History/HistoryDetails'
+import HistoryDetails from '../History/HistoryDetails';
 import { useStyles } from './styles';
 
-export default function Dashboard() {
+export default function Dashboard({ content }) {
   const classes = useStyles();
 
   return (
@@ -24,7 +23,14 @@ export default function Dashboard() {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <HistoryDetails />
+                {/* <HistoryDetails /> */}
+                {(content === "Users") ?
+                  <Users /> :
+                  (content === "History") ?
+                    <History /> :
+                    (content === "UserDetails") ?
+                      <UserDetails /> :
+                      <HistoryDetails />}
               </Paper>
             </Grid>
           </Grid>

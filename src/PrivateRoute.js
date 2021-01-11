@@ -3,7 +3,7 @@ import { Route } from "react-router-dom";
 import { useAuth } from './context/auth';
 import { useHistory } from 'react-router-dom';
 
-export default function PrivateRoute({ component: Component, content, ...rest }) {
+function PrivateRoute({ component: Component, content, ...rest }) {
   const { auth } = useAuth();
   const history = useHistory();
 
@@ -12,6 +12,12 @@ export default function PrivateRoute({ component: Component, content, ...rest })
   }
 
   return (
-    <Route {...rest} render={(props) => < Component {...props} />} />
+    <Route {...rest}
+      render={(props) => {
+        return <Component content={content} {...props} />
+      }}
+    />
   )
 }
+
+export default PrivateRoute;

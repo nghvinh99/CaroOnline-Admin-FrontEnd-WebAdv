@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, unwrapResult } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { adminAPI } from '../../api/adminAPI';
 
 const initialState = {

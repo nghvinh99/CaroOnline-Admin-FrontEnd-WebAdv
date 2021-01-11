@@ -8,7 +8,6 @@ const initialState = {
     sortBy: 'id',
     order: 'ASC',
   },
-  currentData: [],
   status: 'idle',
   error: null,
 }
@@ -50,18 +49,31 @@ const historySlice = createSlice({
     },
   },
   extraReducers: {
+    [fetchHistory.pending]: (state, action) => {
+      return {
+        ...state,
+        status: 'loading'
+      }
+    },
     [fetchHistory.fulfilled]: (state, action) => {
       return {
         ...state,
         history: action.payload,
+        status: 'succeded'
       }
     },
-    [fetchGameData.fulfilled]: (state, action) => {
+    [fetchHistory.rejected]: (state, action) => {
       return {
         ...state,
-        currentData: action.payload,
+        status: 'failed'
       }
-    }
+    },
+    // [fetchGameData.fulfilled]: (state, action) => {
+    //   return {
+    //     ...state,
+    //     currentData: action.payload,
+    //   }
+    // }
   }
 })
 
@@ -69,7 +81,7 @@ export const { historyFilter } = historySlice.actions;
 
 export const selectAllHistory = state => state.history.history;
 
-export const selectHistoryById = (state, id) => state.history.history.find(history => history.id === id);
+export const selectHistoryById = (state, id) => state.history.history.find(history => history.id === id)
 
 export const selectFilter = state => state.history.filter;
 

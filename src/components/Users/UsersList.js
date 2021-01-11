@@ -10,12 +10,10 @@ import ConfirmDialog from '../ConfirmDialog';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { flipUserStatus, updateUserStatus } from '../../features/users/usersSlice';
-import { useHistory } from 'react-router-dom';
 import { useStyles } from './styles';
 
 export default function UsersList({ users, page, rows }) {
   const classes = useStyles();
-  const history = useHistory();
   const dispatch = useDispatch();
   const apiState = useSelector(state => state.users.status);
   const [currentId, setCurrentId] = useState(0);
@@ -32,7 +30,7 @@ export default function UsersList({ users, page, rows }) {
   };
 
   const handleConfirm = (userId) => {
-    if (apiState == 'idle') {
+    if (apiState === 'idle') {
       dispatch(flipUserStatus(userId));
       dispatch(updateUserStatus(userId));
     }
@@ -41,7 +39,7 @@ export default function UsersList({ users, page, rows }) {
 
   const handleClick = (id) => {
     const path = "/dashboard/users/" + id;
-    history.push(path);
+    window.location.href = path;
   }
 
   return (
@@ -64,7 +62,7 @@ export default function UsersList({ users, page, rows }) {
           <TableCell align="center">{user.rank}</TableCell>
           <TableCell align="right">
             <FormControlLabel
-              checked={(user.status == 1) ? false : true}
+              checked={(user.status === 1) ? false : true}
               onChange={() => handleClickOpen(user.id)}
               control={<Checkbox icon={<LockOpenIcon />}
                 checkedIcon={<LockIcon />} />}

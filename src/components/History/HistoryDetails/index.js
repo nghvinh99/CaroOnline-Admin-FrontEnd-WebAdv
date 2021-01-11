@@ -1,15 +1,17 @@
 import React from 'react';
 import Title from '../../Title';
-import Paper from '@material-ui/core/Paper';
 import Game from '../../Game';
-import { useStyles } from './styles';
+import { useParams } from 'react-router-dom';
 
 export default function HistoryDetails() {
-  const classes = useStyles();
+  const { id } = useParams();
+
   return (
     <React.Fragment>
       <Title>History {'>'} boards</Title>
-      <Game />
+      <Game
+        id={parseInt(id)}
+      />
     </React.Fragment>
   )
 }

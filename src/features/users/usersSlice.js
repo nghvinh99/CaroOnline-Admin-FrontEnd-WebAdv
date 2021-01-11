@@ -49,30 +49,43 @@ const usersSlice = createSlice({
     },
     updateUserStatus: (state, action) => {
       const userId = action.payload;
-      const users = state.users.map(user => {
+      state.users.map(user => {
         if (user.id === userId) {
           user.status = 1 - user.status;
         }
         return user;
       })
-    }
+    },
   },
   extraReducers: {
+    [fetchUsers.pending]: (state, action) => {
+      return {
+        ...state,
+        status: 'loading',
+      }
+    },
     [fetchUsers.fulfilled]: (state, action) => {
       return {
         ...state,
         users: action.payload,
+        status: 'succeeded',
+      }
+    },
+    [fetchUsers.rejected]: (state, action) => {
+      return {
+        ...state,
+        status: 'failed',
       }
     },
     [flipUserStatus.fulfilled]: (state, action) => {
       return {
-        ...state
+        ...state,
       }
     }
   }
 })
 
-export const { usersFilter, updateUserStatus } = usersSlice.actions;
+export const { usersFilter, updateUserStatus, setCurrentUser } = usersSlice.actions;
 
 export const selectAllUsers = state => state.users.users;
 

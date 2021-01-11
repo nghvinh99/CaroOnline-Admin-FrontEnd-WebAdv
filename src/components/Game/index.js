@@ -7,31 +7,20 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchGameData, selectGameData } from '../../features/history/historySlice';
+import { selectHistoryById } from '../../features/history/historySlice';
 import ChatItem from './ChatItem';
 import { useStyles } from './styles';
 
-function Game() {
+export default function Game({ id }) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const apiStatus = useSelector(state => state.history.status);
-  const gameData = useSelector(selectGameData);
+  const gameData = useSelector(state => selectHistoryById(state, id));
+
 
   const tableSize = 20;
   const [stepNumber, setStepNumber] = useState(2);
   const [xIsNext, setXIsNext] = useState(true);
   const [descending, setDescending] = useState(false);
-
-  useEffect(() => {
-    if (apiStatus === 'idle') {
-      dispatch(fetchGameData(1));
-    }
-  }, [apiStatus, dispatch]);
-
-  if (!gameData.data) {
-    return (<>OK</>);
-  }
-
 
   const current = gameData.data[stepNumber];
   // const winner = calculateWinner(current.squares, tableSize, current.index);
@@ -59,6 +48,7 @@ function Game() {
   chat.map((step, move) => {
     chatList.push(
       <ChatItem
+        key={move}
         senderId={step.idSender}
         message={step.message}
       />
@@ -105,7 +95,7 @@ function Game() {
   return (
     <Grid container spacing={0} className={classes.root}
       justify="space-evenly" direction="row">
-      <Grid item xs={12} sm={8}>
+      <Grid item sm={8}>
         <Board
           squares={current.squares}
           onClick={(i) => handleClick(i)}
@@ -113,37 +103,37 @@ function Game() {
           highlight={highlight}
         />
       </Grid>
-      <Grid container xs={12} sm={3} spacing={2}
-        direction="row" alignItems="flex-start">
-        <Grid item xs={8} sm={8}>
-          <Typography align="left">
-            {status}
+      <Grid item sm={3} >
+        <Grid container spacing={2}
+          direction="row" alignItems="flex-start">
+          <Grid item sm={8}>
+            <Typography align="left">
+              {status}
+            </Typography>
+          </Grid>
+          <Grid item sm={4}>
+            <OrderToggleButton
+              handleChange={() => handleChange()}
+            />
+          </Grid>
+          <Grid item sm={12}>
+            <Typography align="left">
+              Move list:
           </Typography>
-        </Grid>
-        <Grid item xs={4} sm={4}>
-          <OrderToggleButton
-            handleChange={() => handleChange()}
-          />
-        </Grid>
-        <Grid item xs={12} sm={12}>
-          <Typography align="left">
-            Move list:
+            <List className={classes.moveList}>
+              {moveList}
+            </List>
+          </Grid>
+          <Grid item sm={12}>
+            <Typography align="left">
+              Chat:
           </Typography>
-          <List className={classes.moveList}>
-            {moveList}
-          </List>
+            <List className={classes.moveList}>
+              {chatList}
+            </List>
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={12}>
-          <Typography align="left">
-            Chat:
-          </Typography>
-          <List className={classes.moveList}>
-            {chatList}
-          </List>
-        </Grid>
-      </Grid>
-    </Grid>
+      </Grid >
+    </Grid >
   );
 }
-
-export default Game;

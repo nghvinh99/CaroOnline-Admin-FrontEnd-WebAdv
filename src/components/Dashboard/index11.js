@@ -1,8 +1,3 @@
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
-import Copyright from '../Copyright';
-import Button from '@material-ui/core/Button';
 import Axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import Dashboards from '.';

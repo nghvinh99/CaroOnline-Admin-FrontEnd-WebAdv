@@ -7,7 +7,6 @@ import { useStyles } from './styles';
 
 export default function ProfileImage({ user }) {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
 
   return (
     <Card className={classes.card}>

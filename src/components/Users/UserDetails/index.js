@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -7,20 +7,18 @@ import ProfileImage from './ProfileImage';
 import Title from '../../Title';
 import ConfirmDialog from '../../ConfirmDialog';
 import { useSelector, useDispatch } from 'react-redux';
-import { flipUserStatus, selectUserById, updateUserStatus, } from '../../../features/users/usersSlice';
+import { flipUserStatus, selectUserById, updateUserStatus } from '../../../features/users/usersSlice';
+import { useParams } from 'react-router-dom';
 import { useStyles } from './styles';
 
-export default function UserDetails({ userId }) {
+export default function UserDetails() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const user = useSelector(state => selectUserById(state, userId));
+  const { id } = useParams();
+
+  const user = useSelector(state => selectUserById(state, parseInt(id)));
   const apiState = useSelector(state => state.users.status);
-
   const [open, setOpen] = React.useState(false);
-
-  if (!user) {
-    return (<></>);
-  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -31,7 +29,7 @@ export default function UserDetails({ userId }) {
   };
 
   const handleConfirm = (userId) => {
-    if (apiState == 'idle') {
+    if (apiState === 'idle') {
       dispatch(flipUserStatus(userId));
       dispatch(updateUserStatus(userId));
     }
@@ -43,7 +41,7 @@ export default function UserDetails({ userId }) {
       <ConfirmDialog
         open={open}
         cancel={handleClose}
-        confirm={() => handleConfirm(userId)}
+        confirm={() => handleConfirm(user.id)}
       />
       <Title>Users</Title>
       <Grid container spacing={1} justify="space-evenly" direction="row">
@@ -86,7 +84,7 @@ export default function UserDetails({ userId }) {
             label="Win rate" value={(user.percent_win * 100) + "%"} variant="outlined"
           />
           <FormControlLabel
-            control={<Checkbox color="secondary" checked={(user.status == 1) ? false : true} onChange={handleClickOpen} />}
+            control={<Checkbox color="secondary" checked={(user.status === 1) ? false : true} onChange={handleClickOpen} />}
             label="Blocked" labelPlacement="end" className={classes.checkbox}
           />
         </Grid>

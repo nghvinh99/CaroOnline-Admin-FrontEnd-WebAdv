@@ -39,7 +39,7 @@ export default function SignInForm() {
       username: username,
       password: password
     }
-    if (adminStatus == 'idle') {
+    if (adminStatus === 'idle') {
       const resultLogin = await dispatch(adminLogin(user));
       if (adminLogin.fulfilled.match(resultLogin)) {
         history.push('/dashboard');

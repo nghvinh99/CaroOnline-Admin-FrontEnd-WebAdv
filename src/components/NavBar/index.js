@@ -17,30 +17,18 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import IconButton from '@material-ui/core/IconButton';
 import HistoryIcon from '@material-ui/icons/History';
-import { useHistory } from 'react-router-dom';
 import Divider from '@material-ui/core/Divider';
 import { selectDrawer, openNavBar, closeNavBar } from '../../features/drawer/drawerSlice';
-import { selectFilter, fetchUsers } from '../../features/users/usersSlice';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
 import { useStyles } from '../Dashboard/styles';
 
 export default function NavBar() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const open = useSelector(selectDrawer);
-  const history = useHistory();
-  const filter = useSelector(selectFilter);
-  const userStatus = useSelector(state => state.users.status);
-
-  useEffect(() => {
-    if (userStatus === 'idle') {
-      dispatch(fetchUsers(filter));
-    }
-  }, [userStatus, dispatch]);
 
   const handleClick = (path) => {
-    history.push(path);
+    window.location.href = path;
   }
 
   return (
@@ -87,15 +75,15 @@ export default function NavBar() {
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
           </ListItem>
-          <ListItem button>
+          <ListItem button
+            onClick={() => handleClick('/dashboard/users')}>
             <ListItemIcon>
               <PeopleIcon />
             </ListItemIcon>
-            <ListItemText primary="Users"
-              onClick={() => handleClick('/dashboard/users')}
-            />
+            <ListItemText primary="Users" />
           </ListItem>
-          <ListItem button>
+          <ListItem button
+            onClick={() => handleClick('/dashboard/history')} >
             <ListItemIcon>
               <HistoryIcon />
             </ListItemIcon>
