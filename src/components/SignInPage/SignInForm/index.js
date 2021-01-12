@@ -6,14 +6,16 @@ import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Alert from '@material-ui/lab/Alert';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { adminLogin } from '../../../features/admin/adminSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { AuthContext } from '../../../context/auth';
 import { useStyles } from '../styles';
 
 export default function SignInForm() {
   const classes = useStyles();
+  const auth = useContext(AuthContext);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -40,9 +42,11 @@ export default function SignInForm() {
       password: password
     }
     if (adminStatus === 'idle') {
-      const resultLogin = await dispatch(adminLogin(user));
-      if (adminLogin.fulfilled.match(resultLogin)) {
-        history.push('/dashboard');
+      dispatch(adminLogin(user));
+      auth.login();
+      if (auth.check()) {
+        auth.login();
+        window.location.href = '/dashboard';
       }
     }
   }

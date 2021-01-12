@@ -44,7 +44,7 @@ export const usersAPI = {
         url: process.env.REACT_APP_API + '/users/block',
         params: user,
         headers: {
-          Authorization: 'Bearer' + localStorage.getItem('token')
+          Authorization: 'Bearer ' + localStorage.getItem('token')
         }
       });
       return res.data;
@@ -58,7 +58,7 @@ export const usersAPI = {
         method: 'GET',
         url: process.env.REACT_APP_API + '/users/all-player-names',
         headers: {
-          Authorization: 'Bearer' + localStorage.getItem('token')
+          Authorization: 'Bearer ' + localStorage.getItem('token')
         }
       });
       return res.data;

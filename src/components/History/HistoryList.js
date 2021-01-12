@@ -16,6 +16,9 @@ export default function HistoryList({ histories, page, rows }) {
     dispatch(fetchAllPlayerNames());
   }, [dispatch]);
 
+  if (!players[0]) {
+    return <></>
+  }
 
   const getName = (userId) => (players.find(player => parseInt(player.id) === parseInt(userId))).name;
 

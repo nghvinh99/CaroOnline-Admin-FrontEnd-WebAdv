@@ -18,6 +18,7 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async (filter, { 
     const response = await usersAPI.get(filter);
     return response;
   } catch (err) {
+    localStorage.clear();
     if (!err.response) {
       throw err;
     }
@@ -30,6 +31,7 @@ export const fetchUser = createAsyncThunk('users/fetchUser', async (userId, { re
     const response = await usersAPI.getSingle(userId);
     return response;
   } catch (err) {
+    localStorage.clear();
     if (!err.response) {
       throw err;
     }
@@ -42,6 +44,7 @@ export const flipUserStatus = createAsyncThunk('users/flipUserStatus', async (us
     const response = await usersAPI.flipStatus(userId);
     return response;
   } catch (err) {
+    localStorage.clear();
     if (!err.response) {
       throw err;
     }

@@ -6,10 +6,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Badge from '@material-ui/core/Badge';
 import Drawer from '@material-ui/core/Drawer';
 import MenuIcon from '@material-ui/icons/Menu';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import Typography from '@material-ui/core/Typography';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
@@ -18,12 +16,16 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import IconButton from '@material-ui/core/IconButton';
 import HistoryIcon from '@material-ui/icons/History';
 import Divider from '@material-ui/core/Divider';
+import AccountCircleSharpIcon from '@material-ui/icons/AccountCircleSharp';
 import { selectDrawer, openNavBar, closeNavBar } from '../../features/drawer/drawerSlice';
 import { useSelector, useDispatch } from 'react-redux';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/auth';
 import { useStyles } from '../Dashboard/styles';
 
 export default function NavBar() {
   const classes = useStyles();
+  const auth = useContext(AuthContext);
   const dispatch = useDispatch();
   const open = useSelector(selectDrawer);
 
@@ -44,13 +46,12 @@ export default function NavBar() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+          <Typography component="h1" variant="h6" color="inherit" onClick={() => { window.location.href = "/dashboard" }}
+            noWrap className={classes.title}>
             Dashboard
           </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
+          <IconButton color="inherit" onClick={() => window.location.href = "/auth/profile"}>
+            <AccountCircleSharpIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
@@ -69,7 +70,8 @@ export default function NavBar() {
         <Divider />
 
         <List>
-          <ListItem button>
+          <ListItem button
+            onClick={() => handleClick('/dashboard/')}>
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>
@@ -92,7 +94,8 @@ export default function NavBar() {
 
           <Divider />
 
-          <ListItem button>
+          <ListItem button
+            onClick={() => auth.logout()}>
             <ListItemIcon>
               <ExitToAppIcon />
             </ListItemIcon>

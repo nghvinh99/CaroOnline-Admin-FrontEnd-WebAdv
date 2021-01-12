@@ -15,6 +15,24 @@ export const historyAPI = {
       throw err;
     }
   },
+  getWithId: async function (userId) {
+    try {
+      const user = {
+        userId: userId,
+      }
+      const res = await Axios({
+        method: 'GET',
+        url: process.env.REACT_APP_API + '/history/player',
+        params: user,
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token')
+        }
+      });
+      return res.data;
+    } catch (err) {
+      throw err;
+    }
+  },
   getGameData: async function (gameId) {
     try {
       const game = {

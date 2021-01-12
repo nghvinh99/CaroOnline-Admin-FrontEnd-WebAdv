@@ -9,15 +9,32 @@ import { useState } from 'react';
 function App() {
   const [auth, setAuth] = useState(localStorage.getItem('token'));
 
+  const login = () => {
+    setAuth(true);
+  }
+
+  const logout = () => {
+    setAuth(false);
+    localStorage.clear();
+  }
+
+  const check = () => {
+    return localStorage.getItem('token');
+  }
+
   return (
-    <AuthContext.Provider value={{ auth, setAuth }}>
+    <AuthContext.Provider value={{ auth: auth, login: login, logout: logout, check: check }}>
       <Router>
         <Route exact path='/auth/sign-in' component={SignInPage} />
+
         <Route exact path='/dashboard'>
-          <Dashboard content='Users' />
+          <Dashboard content='Home' />
         </Route>
         <Route exact path='/'>
-          <Dashboard content='Users' />
+          <Dashboard content='Home' />
+        </Route>
+        <Route exact path='/auth/profile' >
+          <Dashboard content='Profile' />
         </Route>
         <Route exact path='/dashboard/users'>
           <Dashboard content='Users' />
@@ -32,7 +49,7 @@ function App() {
           <Dashboard content='HistoryDetails' />
         </Route>
       </Router>
-    </AuthContext.Provider>
+    </AuthContext.Provider >
   );
 }
 

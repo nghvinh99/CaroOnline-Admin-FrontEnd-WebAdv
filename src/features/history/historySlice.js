@@ -13,6 +13,7 @@ const initialState = {
     data: [],
     chat: [],
   },
+  playerGames: [],
   allPlayerNames: [],
   status: 'idle',
   error: null,
@@ -23,6 +24,20 @@ export const fetchHistory = createAsyncThunk('history/fetchHistory', async (reje
     const response = await historyAPI.get();
     return response;
   } catch (err) {
+    localStorage.clear();
+    if (!err.response) {
+      throw err;
+    }
+    return rejectWithValue(err.response.data);
+  }
+})
+
+export const fetchPlayerHistory = createAsyncThunk('history/fetchPlayerHistory', async (userId, { rejectWithValue }) => {
+  try {
+    const response = await historyAPI.getWithId(userId);
+    return response;
+  } catch (err) {
+    localStorage.clear();
     if (!err.response) {
       throw err;
     }
@@ -35,6 +50,7 @@ export const fetchGameData = createAsyncThunk('history/fetchGameData', async (ga
     const response = await historyAPI.getGameData(gameId);
     return response;
   } catch (err) {
+    localStorage.clear();
     if (!err.response) {
       throw err;
     }
@@ -47,6 +63,7 @@ export const fetchAllPlayerNames = createAsyncThunk('history/fetchAllPlayerNames
     const response = await usersAPI.fetchAllPlayerNames();
     return response;
   } catch (err) {
+    localStorage.clear();
     if (!err.response) {
       throw err;
     }
@@ -84,6 +101,9 @@ const historySlice = createSlice({
         ...state,
         allPlayerNames: action.payload
       }
+    },
+    [fetchPlayerHistory.fulfilled]: (state, action) => {
+      state.playerGames = action.payload;
     }
   }
 })
@@ -99,5 +119,7 @@ export const selectFilter = state => state.history.filter;
 export const selectGameData = state => state.history.game;
 
 export const selectAllPlayerNames = state => state.history.allPlayerNames;
+
+export const selectPlayerGames = state => state.history.playerGames;
 
 export default historySlice.reducer;

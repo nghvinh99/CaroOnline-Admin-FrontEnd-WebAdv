@@ -8,10 +8,19 @@ import Users from '../Users';
 import UserDetails from '../Users/UserDetails';
 import History from '../History';
 import HistoryDetails from '../History/HistoryDetails';
+import HomePage from '../HomePage';
+import Profile from '../Profile';
+import { AuthContext } from '../../context/auth';
+import { useContext } from 'react';
 import { useStyles } from './styles';
 
 export default function Dashboard({ content }) {
   const classes = useStyles();
+  const auth = useContext(AuthContext);
+
+  if (!auth.auth) {
+    window.location.href = "/auth/sign-in"
+  }
 
   return (
     <div className={classes.root}>
@@ -24,18 +33,20 @@ export default function Dashboard({ content }) {
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 {/* <HistoryDetails /> */}
-                {(content === "Users") ?
+                {(content === 'Users') ?
                   <Users /> :
-                  (content === "History") ?
+                  (content === 'History') ?
                     <History /> :
-                    (content === "UserDetails") ?
+                    (content === 'UserDetails') ?
                       <UserDetails /> :
-                      <HistoryDetails />}
+                      (content === 'HistoryDetails') ?
+                        <HistoryDetails /> : (content === 'Profile') ?
+                          <Profile /> : <HomePage />}
               </Paper>
             </Grid>
           </Grid>
         </Container>
-      </main>
-    </div>
+      </main >
+    </div >
   );
 }

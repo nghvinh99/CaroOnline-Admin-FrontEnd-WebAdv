@@ -14,7 +14,6 @@ export default function ChatItem({ senderId, message }) {
   }
 
   const getName = (userId) => (players.find(player => parseInt(player.id) === parseInt(userId))).name;
-  // const getName = (userId) => (1);
 
   let name;
 
