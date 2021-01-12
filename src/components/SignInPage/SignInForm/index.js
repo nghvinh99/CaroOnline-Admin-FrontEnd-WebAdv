@@ -69,10 +69,6 @@ export default function SignInForm() {
         autoComplete="current-password"
         onChange={passwordInput}
       />
-      <FormControlLabel
-        control={<Checkbox value="remember" color="primary" />}
-        label="Remember me"
-      />
 
       <Button
         type="submit" fullWidth variant="contained"

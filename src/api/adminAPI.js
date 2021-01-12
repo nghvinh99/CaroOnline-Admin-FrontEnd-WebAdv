@@ -41,5 +41,20 @@ export const adminAPI = {
     } catch (err) {
       throw err;
     }
+  },
+  changePassword: async function (info) {
+    try {
+      const res = await axios({
+        method: 'POST',
+        url: process.env.REACT_APP_API + '/auth/change-password',
+        data: info,
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token')
+        }
+      });
+      return res.data;
+    } catch (err) {
+      throw err;
+    }
   }
 }

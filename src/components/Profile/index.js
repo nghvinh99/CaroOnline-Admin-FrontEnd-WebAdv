@@ -39,7 +39,7 @@ export default function UserDetails() {
       <ChangePassword
         open={open}
         handleClose={handleClose}
-      // confirm={() => handleConfirm(admin.id)}
+        userId={id}
       />
       <Title>Users</Title>
       <Grid container spacing={1} justify="space-evenly" direction="row">

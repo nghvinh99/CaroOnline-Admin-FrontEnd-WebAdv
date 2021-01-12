@@ -76,7 +76,9 @@ export default function Game({ game, lastStep }) {
   }
 
   let status = '';
+  let match = '';
   if (players[0]) {
+    match = getName(game.winner) + " vs " + getName(game.loser);
     if (game.type === 'draw') {
       status = 'This game is draw!';
     } else if (game.type === 'surrender') {
@@ -102,6 +104,8 @@ export default function Game({ game, lastStep }) {
           <Grid item sm={8}>
             <Typography align="left">
               {status}
+              <br></br>
+              {match}
             </Typography>
           </Grid>
           <Grid item sm={4}>

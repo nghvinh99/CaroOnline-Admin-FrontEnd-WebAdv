@@ -6,16 +6,25 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { useDispatch } from 'react-redux';
+import { changePassword } from '../../features/admin/adminSlice';
 import { useState } from 'react';
 
-export default function ChangPassword({ open, handleClose }) {
+export default function ChangPassword({ open, handleClose, userId }) {
+  const dispatch = useDispatch();
   const [pass, setPass] = useState('');
   const [conf, setConf] = useState('');
   const handleConfirm = () => {
-    console.log(pass);
-    console.log(conf);
-
+    if (pass === conf) {
+      const info = {
+        pass: pass,
+        id: userId
+      }
+      dispatch(changePassword(info));
+    }
     handleClose();
+    setPass('');
+    setConf('');
   }
 
   const handleInput = (event, setter) => {

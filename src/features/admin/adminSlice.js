@@ -33,6 +33,18 @@ export const adminLogin = createAsyncThunk('admin/adminLogin',
     }
   })
 
+export const changePassword = createAsyncThunk('admin/changePassword', async (info, { rejectWithValue }) => {
+  try {
+    const response = await adminAPI.changePassword(info);
+    return response;
+  } catch (err) {
+    if (!err.response) {
+      throw err;
+    }
+    return rejectWithValue(err.response.data);
+  }
+})
+
 export const adminSlice = createSlice({
   name: 'admin',
   initialState,
@@ -42,6 +54,9 @@ export const adminSlice = createSlice({
     },
     [fetchProfile.fulfilled]: (state, action) => {
       state.admin = action.payload;
+    },
+    [changePassword.fulfilled]: (state, action) => {
+      return;
     }
   }
 });
