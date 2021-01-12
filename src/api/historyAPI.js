@@ -1,12 +1,11 @@
 import Axios from 'axios';
 
 export const historyAPI = {
-  get: async function (filter) {
+  get: async function () {
     try {
       const res = await Axios({
         method: 'GET',
         url: process.env.REACT_APP_API + '/history',
-        params: filter,
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token')
         }
@@ -23,7 +22,7 @@ export const historyAPI = {
       }
       const res = await Axios({
         method: 'GET',
-        url: process.env.REACT_APP_API + '/history/game/data',
+        url: process.env.REACT_APP_API + '/history/game/',
         params: game,
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token')

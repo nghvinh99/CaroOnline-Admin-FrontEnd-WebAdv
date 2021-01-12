@@ -21,7 +21,7 @@ export default function Filter() {
 
   useEffect(() => {
     dispatch(usersFilter(filter));
-  }, [filter, dispatch])
+  })
 
   const handleChange = (event) => {
     setFilter({

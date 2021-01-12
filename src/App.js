@@ -4,28 +4,10 @@ import SignInPage from './components/SignInPage';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { AuthContext } from './context/auth';
 import Dashboard from './components/Dashboard/index';
-import { selectFilter, fetchUsers } from './features/users/usersSlice';
-import { fetchHistory } from './features/history/historySlice';
-import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
 import { useState } from 'react';
 
 function App() {
-  const dispatch = useDispatch();
-  const filter = useSelector(selectFilter);
-  const userStatus = useSelector(state => state.users.status);
-  const historyStatus = useSelector(state => state.history.status);
-
   const [auth, setAuth] = useState(localStorage.getItem('token'));
-
-  useEffect(() => {
-    if (userStatus === 'idle') {
-      dispatch(fetchUsers(filter));
-    }
-    if (historyStatus === 'idle') {
-      dispatch(fetchHistory(filter));
-    }
-  }, [userStatus, dispatch, filter]);
 
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>

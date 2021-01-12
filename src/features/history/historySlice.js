@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { historyAPI } from '../../api/historyAPI';
+import { usersAPI } from '../../api/usersAPI';
 
 const initialState = {
   history: [],
@@ -8,13 +9,18 @@ const initialState = {
     sortBy: 'id',
     order: 'ASC',
   },
+  game: {
+    data: [],
+    chat: [],
+  },
+  allPlayerNames: [],
   status: 'idle',
   error: null,
 }
 
-export const fetchHistory = createAsyncThunk('history/fetchHistory', async (filter, { rejectWithValue }) => {
+export const fetchHistory = createAsyncThunk('history/fetchHistory', async (rejectWithValue) => {
   try {
-    const response = await historyAPI.get(filter);
+    const response = await historyAPI.get();
     return response;
   } catch (err) {
     if (!err.response) {
@@ -27,6 +33,18 @@ export const fetchHistory = createAsyncThunk('history/fetchHistory', async (filt
 export const fetchGameData = createAsyncThunk('history/fetchGameData', async (gameId, { rejectWithValue }) => {
   try {
     const response = await historyAPI.getGameData(gameId);
+    return response;
+  } catch (err) {
+    if (!err.response) {
+      throw err;
+    }
+    return rejectWithValue(err.response.data);
+  }
+})
+
+export const fetchAllPlayerNames = createAsyncThunk('history/fetchAllPlayerNames', async (rejectWithValue) => {
+  try {
+    const response = await usersAPI.fetchAllPlayerNames();
     return response;
   } catch (err) {
     if (!err.response) {
@@ -49,31 +67,24 @@ const historySlice = createSlice({
     },
   },
   extraReducers: {
-    [fetchHistory.pending]: (state, action) => {
-      return {
-        ...state,
-        status: 'loading'
-      }
-    },
     [fetchHistory.fulfilled]: (state, action) => {
       return {
         ...state,
         history: action.payload,
-        status: 'succeded'
       }
     },
-    [fetchHistory.rejected]: (state, action) => {
+    [fetchGameData.fulfilled]: (state, action) => {
       return {
         ...state,
-        status: 'failed'
+        game: action.payload,
       }
     },
-    // [fetchGameData.fulfilled]: (state, action) => {
-    //   return {
-    //     ...state,
-    //     currentData: action.payload,
-    //   }
-    // }
+    [fetchAllPlayerNames.fulfilled]: (state, action) => {
+      return {
+        ...state,
+        allPlayerNames: action.payload
+      }
+    }
   }
 })
 
@@ -85,6 +96,8 @@ export const selectHistoryById = (state, id) => state.history.history.find(histo
 
 export const selectFilter = state => state.history.filter;
 
-export const selectGameData = state => state.history.currentData;
+export const selectGameData = state => state.history.game;
+
+export const selectAllPlayerNames = state => state.history.allPlayerNames;
 
 export default historySlice.reducer;

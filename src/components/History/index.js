@@ -5,20 +5,18 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
 import Title from '../Title';
-import Filter from '../Filter';
 import HistoryList from './HistoryList';
 import Paper from '@material-ui/core/Paper';
 import TableContainer from '@material-ui/core/TableContainer';
 import Box from '@material-ui/core/Box'
 import TablePagination from '@material-ui/core/TablePagination';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectFilter, selectAllHistory, fetchHistory } from '../../features/history/historySlice';
+import { selectAllHistory, fetchHistory } from '../../features/history/historySlice';
 import { useStyles } from './styles';
 
 export default function History() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const filter = useSelector(selectFilter);
   const history = useSelector(selectAllHistory);
   const apiState = useSelector(state => state.history.status);
 
@@ -28,11 +26,10 @@ export default function History() {
 
   useEffect(() => {
     if (apiState === 'idle') {
-      dispatch(fetchHistory(filter));
+      dispatch(fetchHistory());
       setPage(0);
     }
-  }, [apiState, dispatch, filter]);
-
+  }, [apiState, dispatch]);
 
   const handleChangePage = (event, page) => {
     setPage(page);
@@ -46,7 +43,6 @@ export default function History() {
   return (
     <React.Fragment>
       <Title>History</Title>
-      <Filter />
       <Paper className={classes.root}>
         <TableContainer className={classes.container}>
           <Table size="small" stickyHeader >

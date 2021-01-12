@@ -1,34 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import Board from './Board';
 import OrderToggleButton from './OrderToggleButton';
-import calculateWinner from './service';
 import ListItem from './ListItem';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectHistoryById } from '../../features/history/historySlice';
 import ChatItem from './ChatItem';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectAllPlayerNames, fetchAllPlayerNames } from '../../features/history/historySlice';
 import { useStyles } from './styles';
 
-export default function Game({ id }) {
+export default function Game({ game, lastStep }) {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const gameData = useSelector(state => selectHistoryById(state, id));
-
-
   const tableSize = 20;
-  const [stepNumber, setStepNumber] = useState(2);
-  const [xIsNext, setXIsNext] = useState(true);
+  const [stepNumber, setStepNumber] = useState(lastStep);
   const [descending, setDescending] = useState(false);
 
-  const current = gameData.data[stepNumber];
-  // const winner = calculateWinner(current.squares, tableSize, current.index);
+  const dispatch = useDispatch();
+  const players = useSelector(selectAllPlayerNames);
+
+  useEffect(() => {
+    dispatch(fetchAllPlayerNames());
+  }, [dispatch]);
+
+  const getName = (userId) => (players.find(player => parseInt(player.id) === parseInt(userId))).name;
+
+  if (lastStep === -1) {
+    return <></>
+  }
+
+  const current = game.data[stepNumber];
   const highlight = Array(Math.pow(tableSize, 2)).fill(null);
 
-  const handleClick = (i) => {
-
-  }
 
   const handleChange = () => {
     setDescending(!descending);
@@ -36,15 +39,10 @@ export default function Game({ id }) {
 
   const jumpTo = (step) => {
     setStepNumber(step);
-    setXIsNext((step % 2) === 0);
-  }
-
-  const checkDraw = (squares) => {
-    return (!squares.includes(null));
   }
 
   let chatList = [];
-  const chat = gameData.chat.slice();
+  const chat = game.chat.slice();
   chat.map((step, move) => {
     chatList.push(
       <ChatItem
@@ -57,7 +55,7 @@ export default function Game({ id }) {
   })
 
   let moveList = [];
-  const list = gameData.data.slice();
+  const list = game.data.slice();
   list.map((step, move) => {
     const desc = move ?
       'Go to position (' + step.x + ', ' + step.y + ')'
@@ -77,19 +75,15 @@ export default function Game({ id }) {
     moveList.reverse();
   }
 
-  let status;
-  // if (winner.winner) {
-  //   current.winner = winner.winner;
-  //   status = 'Winner: ' + winner.winner;
-  //   winner.line.forEach(i => {
-  //     highlight[i] = true;
-  //   })
-  if (1 === 2) {
-    return;
-  } else if (checkDraw(current.squares)) {
-    status = 'Game draw!';
-  } else {
-    status = 'Next player: ' + (xIsNext ? 'X' : 'O');
+  let status = '';
+  if (players[0]) {
+    if (game.type === 'draw') {
+      status = 'This game is draw!';
+    } else if (game.type === 'surrender') {
+      status = getName(game.loser) + ' was surrender';
+    } else {
+      status = 'Winner was ' + getName(game.winner);
+    }
   }
 
   return (
@@ -98,7 +92,6 @@ export default function Game({ id }) {
       <Grid item sm={8}>
         <Board
           squares={current.squares}
-          onClick={(i) => handleClick(i)}
           tableSize={tableSize}
           highlight={highlight}
         />
