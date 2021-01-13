@@ -84,7 +84,7 @@ export default function Orders() {
                 users={users.slice(page * rows, page * rows + rows)}
                 page={page}
                 rows={rows}
-              /> : <></>
+              />
             </Table>
           }
         </TableContainer>
