@@ -11,6 +11,9 @@ const initialState = {
   user: {},
   status: 'idle',
   error: null,
+  state: '',
+  blockStatus: '',
+  blockOneUserStatus: '',
 }
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async (filter, { rejectWithValue }) => {
@@ -68,6 +71,11 @@ const usersSlice = createSlice({
       const users = state.users.map(user => {
         if (parseInt(user.id) === parseInt(userId)) {
           user.status = 1 - user.status;
+          if (user.status === 1) {
+            state.blockStatus = 'unblocked';
+          } else {
+            state.blockStatus = 'blocked';
+          }
         }
         return user;
       })
@@ -76,32 +84,30 @@ const usersSlice = createSlice({
   },
   extraReducers: {
     [fetchUsers.fulfilled]: (state, action) => {
-      return {
-        ...state,
-        users: action.payload,
-      }
+      state.users = action.payload;
+      state.state = 'OK';
+    },
+    [fetchUsers.pending]: (state, action) => {
+      state.state = 'Pending'
     },
     [flipUserStatus.fulfilled]: (state, action) => {
       const res = action.payload;
       if (res) {
         const val = 1 - state.user.status;
-        return {
-          ...state,
-          user: {
-            ...state.user,
-            status: val,
-          },
+        state.user.status = val;
+        if (val === 1) {
+          state.blockOneUserStatus = 'unblocked';
+        } else {
+          state.blockOneUserStatus = 'blocked';
         }
-      }
-      return {
-        ...state,
       }
     },
     [fetchUser.fulfilled]: (state, action) => {
-      return {
-        ...state,
-        user: action.payload,
-      }
+      state.user = action.payload;
+      state.state = 'OK';
+    },
+    [fetchUser.pending]: (state, action) => {
+      state.state = 'Pending';
     }
   }
 })

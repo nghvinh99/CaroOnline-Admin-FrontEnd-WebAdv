@@ -17,6 +17,7 @@ const initialState = {
   allPlayerNames: [],
   status: 'idle',
   error: null,
+  state: '',
 }
 
 export const fetchHistory = createAsyncThunk('history/fetchHistory', async (rejectWithValue) => {
@@ -85,16 +86,18 @@ const historySlice = createSlice({
   },
   extraReducers: {
     [fetchHistory.fulfilled]: (state, action) => {
-      return {
-        ...state,
-        history: action.payload,
-      }
+      state.state = 'OK';
+      state.history = action.payload;
+    },
+    [fetchHistory.pending]: (state, action) => {
+      state.state = 'Pending';
     },
     [fetchGameData.fulfilled]: (state, action) => {
-      return {
-        ...state,
-        game: action.payload,
-      }
+      state.game = action.payload;
+      state.state = 'OK';
+    },
+    [fetchGameData.pending]: (state, action) => {
+      state.state = 'Pending';
     },
     [fetchAllPlayerNames.fulfilled]: (state, action) => {
       return {
@@ -104,6 +107,10 @@ const historySlice = createSlice({
     },
     [fetchPlayerHistory.fulfilled]: (state, action) => {
       state.playerGames = action.payload;
+      state.state = 'OK';
+    },
+    [fetchPlayerHistory.pending]: (state, action) => {
+      state.state = 'Pending';
     }
   }
 })

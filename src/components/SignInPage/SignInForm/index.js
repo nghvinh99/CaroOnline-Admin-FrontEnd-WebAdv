@@ -1,13 +1,10 @@
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Alert from '@material-ui/lab/Alert';
-import { useState, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useState, useContext, useEffect } from 'react';
 import { adminLogin } from '../../../features/admin/adminSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { AuthContext } from '../../../context/auth';
@@ -19,13 +16,12 @@ export default function SignInForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const waiting = false;
-  const invalid = false;
+  const [waiting, setWaiting] = useState(false);
+  const [invalid, setInvalid] = useState(false);
 
   const dispatch = useDispatch();
   const adminStatus = useSelector(state => state.admin.status);
-
-  const history = useHistory();
+  const loginState = useSelector(state => state.admin.state);
 
   const usernameInput = (e) => {
     setUsername(e.target.value);
@@ -43,13 +39,22 @@ export default function SignInForm() {
     }
     if (adminStatus === 'idle') {
       dispatch(adminLogin(user));
-      auth.login();
-      if (auth.check()) {
-        auth.login();
-        window.location.href = '/dashboard';
-      }
     }
   }
+
+  useEffect(() => {
+    if (loginState === 'Pending') {
+      setWaiting(true);
+    } else {
+      setWaiting(false);
+    }
+    if (loginState === 'Unauthorized') {
+      setInvalid(true);
+    } else if (loginState === 'OK') {
+      auth.login();
+      window.location.href = '/dashboard';
+    }
+  }, [loginState])
 
   return (
     <form className={classes.form} onSubmit={handleSubmit}>

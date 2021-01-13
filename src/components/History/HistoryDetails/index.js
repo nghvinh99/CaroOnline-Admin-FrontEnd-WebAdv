@@ -4,7 +4,7 @@ import Game from '../../Game';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { fetchUsers } from '../../../features/users/usersSlice';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { fetchGameData, selectGameData } from '../../../features/history/historySlice';
 
 export default function HistoryDetails() {
@@ -16,13 +16,14 @@ export default function HistoryDetails() {
   }, [dispatch, id])
 
   const game = useSelector(selectGameData);
+  const state = useSelector(state => state.history.state);
   const lastStep = game.data.length - 1;
 
   return (
     <React.Fragment>
       <Title>History {'>'} boards</Title>
-      {lastStep < 0 ?
-        <></> :
+      {state === 'Pending' ?
+        <LinearProgress /> :
         <Game
           game={game}
           lastStep={lastStep}

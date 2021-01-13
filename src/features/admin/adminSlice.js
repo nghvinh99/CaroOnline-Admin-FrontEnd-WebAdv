@@ -5,6 +5,7 @@ const initialState = {
   admin: null,
   status: 'idle',
   error: null,
+  state: '',
 }
 
 export const fetchProfile = createAsyncThunk('admin/fetchProfile', async (id, { rejectWithValue }) => {
@@ -51,9 +52,20 @@ export const adminSlice = createSlice({
   extraReducers: {
     [adminLogin.fulfilled]: (state, action) => {
       localStorage.setItem('token', action.payload);
+      state.state = 'OK';
+    },
+    [adminLogin.rejected]: (state, action) => {
+      state.state = action.payload;
+    },
+    [adminLogin.pending]: (state, action) => {
+      state.state = 'Pending';
     },
     [fetchProfile.fulfilled]: (state, action) => {
       state.admin = action.payload;
+      state.state = 'OK';
+    },
+    [fetchProfile.pending]: (state, action) => {
+      state.state = 'Pending';
     },
     [changePassword.fulfilled]: (state, action) => {
       return;

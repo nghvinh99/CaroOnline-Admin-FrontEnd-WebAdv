@@ -11,6 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import TableContainer from '@material-ui/core/TableContainer';
 import Box from '@material-ui/core/Box'
 import TablePagination from '@material-ui/core/TablePagination';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectFilter, selectAllUsers, fetchUsers } from '../../features/users/usersSlice';
 import { useStyles } from './styles';
@@ -20,6 +21,7 @@ export default function Orders() {
   const dispatch = useDispatch();
   const filter = useSelector(selectFilter);
   const users = useSelector(selectAllUsers);
+  const state = useSelector(state => state.users.state);
   const apiState = useSelector(state => state.users.status);
 
   const rowsOpts = [10, 20, 50, 100];
@@ -49,39 +51,42 @@ export default function Orders() {
       <Filter />
       <Paper className={classes.root}>
         <TableContainer className={classes.container}>
-          <Table size="small" stickyHeader >
-            <colgroup>
-              <col style={{ width: '5%' }} />
-              <col style={{ width: '5%' }} />
-              <col style={{ width: '25%' }} />
-              <col style={{ width: '25%' }} />
-              <col style={{ width: '5%' }} />
-              <col style={{ width: '5%' }} />
-              <col style={{ width: '5%' }} />
-              <col style={{ width: '10%' }} />
-              <col style={{ width: '10%' }} />
-              <col style={{ width: '5%' }} />
-            </colgroup>
-            <TableHead>
-              <TableRow>
-                <TableCell>STT</TableCell>
-                <TableCell>ID</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell align="center">Point</TableCell>
-                <TableCell align="center">Total match</TableCell>
-                <TableCell align="center">Total win</TableCell>
-                <TableCell align="right">Win Rate</TableCell>
-                <TableCell align="center">Rank</TableCell>
-                <TableCell align="center">Blocked</TableCell>
-              </TableRow>
-            </TableHead>
-            <UsersList
-              users={users.slice(page * rows, page * rows + rows)}
-              page={page}
-              rows={rows}
-            />
-          </Table>
+          {state === 'Pending' ?
+            <LinearProgress /> :
+            <Table size="small" stickyHeader >
+              <colgroup>
+                <col style={{ width: '5%' }} />
+                <col style={{ width: '5%' }} />
+                <col style={{ width: '25%' }} />
+                <col style={{ width: '25%' }} />
+                <col style={{ width: '5%' }} />
+                <col style={{ width: '5%' }} />
+                <col style={{ width: '5%' }} />
+                <col style={{ width: '10%' }} />
+                <col style={{ width: '10%' }} />
+                <col style={{ width: '5%' }} />
+              </colgroup>
+              <TableHead>
+                <TableRow>
+                  <TableCell>STT</TableCell>
+                  <TableCell>ID</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Email</TableCell>
+                  <TableCell align="center">Point</TableCell>
+                  <TableCell align="center">Total match</TableCell>
+                  <TableCell align="center">Total win</TableCell>
+                  <TableCell align="right">Win Rate</TableCell>
+                  <TableCell align="center">Rank</TableCell>
+                  <TableCell align="center">Blocked</TableCell>
+                </TableRow>
+              </TableHead>
+              <UsersList
+                users={users.slice(page * rows, page * rows + rows)}
+                page={page}
+                rows={rows}
+              /> : <></>
+            </Table>
+          }
         </TableContainer>
         <Box display="flex" justifyContent="flex-end" m={1} p={1} bgcolor="background.paper">
           <TablePagination

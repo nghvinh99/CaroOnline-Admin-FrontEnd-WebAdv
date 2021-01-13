@@ -9,6 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import StarIcon from '@material-ui/icons/StarBorder';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { adminAPI } from '../../api/adminAPI';
 import { useState, useEffect } from 'react';
 import { useStyles } from './styles';
@@ -66,9 +67,14 @@ export default function HomePage() {
                   className={classes.cardHeader}
                 />
                 <CardContent>
-                  <Typography variant="subtitle1" align="center">
-                    {col.count + info[col.info]}
-                  </Typography>
+                  {info[col.info] ?
+                    <Typography variant="subtitle1" align="center">
+                      {col.count + info[col.info]}
+                    </Typography> :
+                    <Typography variant="subtitle1" align="center">
+                      <CircularProgress />
+                    </Typography>
+                  }
                 </CardContent>
                 <CardActions>
                   <Button fullWidth onClick={() => window.location.href = col.path}

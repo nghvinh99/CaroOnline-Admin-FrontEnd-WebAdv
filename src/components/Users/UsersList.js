@@ -7,18 +7,26 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox'
 import TableBody from '@material-ui/core/TableBody';
 import ConfirmDialog from '../ConfirmDialog';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { flipUserStatus, updateUserStatus } from '../../features/users/usersSlice';
 import { useStyles } from './styles';
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 export default function UsersList({ users, page, rows }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const apiState = useSelector(state => state.users.status);
+  const blockState = useSelector(state => state.users.blockStatus);
   const [currentId, setCurrentId] = useState(0);
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [snack, setSnack] = useState(false);
 
   const handleClickOpen = (userId) => {
     setOpen(true);
@@ -29,11 +37,21 @@ export default function UsersList({ users, page, rows }) {
     setOpen(false);
   };
 
+  const handleSnackBarOpen = () => {
+    setSnack(true);
+  }
+
+  const handleSnackBarClose = () => {
+    setSnack(false);
+  }
+
   const handleConfirm = (userId) => {
     if (apiState === 'idle') {
       dispatch(flipUserStatus(userId));
       dispatch(updateUserStatus(userId));
+      handleSnackBarOpen();
     }
+
     handleClose();
   }
 
@@ -49,6 +67,11 @@ export default function UsersList({ users, page, rows }) {
         cancel={handleClose}
         confirm={() => handleConfirm(currentId)}
       />
+      <Snackbar open={snack} autoHideDuration={3000} onClose={handleSnackBarClose}>
+        <Alert onClose={handleSnackBarClose} severity="success">
+          User {blockState} successfully!
+        </Alert>
+      </Snackbar>
       {users.map((user, index) => (
         <TableRow key={user.id} hover>
           <TableCell className={classes.tableCell} onClick={() => handleClick(user.id)}>{page * rows + index + 1}</TableCell>
