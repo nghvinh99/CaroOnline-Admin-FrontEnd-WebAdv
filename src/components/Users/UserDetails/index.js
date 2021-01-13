@@ -111,7 +111,7 @@ export default function UserDetails() {
           <Grid item xs={12} sm={6}>
             <TextField
               InputProps={{ readOnly: true }} className={classes.textField} fullWidth
-              label="ID" value={user.id || ''} variant="outlined"
+              label="ID" value={user.id} variant="outlined"
             />
             <TextField
               InputProps={{ readOnly: true }} className={classes.textField} fullWidth
@@ -119,23 +119,23 @@ export default function UserDetails() {
             />
             <TextField
               InputProps={{ readOnly: true }} className={classes.textField} fullWidth
-              label="Email" value={user.email || ''} variant="outlined"
+              label="Email" value={user.email} variant="outlined"
             />
             <TextField
               InputProps={{ readOnly: true }} className={classes.textField} fullWidth
-              label="Created at" value={user.created_at || ''} variant="outlined"
+              label="Created at" value={user.created_at} variant="outlined"
             />
             <TextField
               InputProps={{ readOnly: true }} className={classes.textField} fullWidth
-              label="Point" value={user.point || ''} variant="outlined"
+              label="Point" value={user.point} variant="outlined"
             />
             <TextField
               InputProps={{ readOnly: true }} className={classes.textField} fullWidth
-              label="Total match" value={user.total_match || ''} variant="outlined"
+              label="Total match" value={user.total_match} variant="outlined"
             />
             <TextField
               InputProps={{ readOnly: true }} className={classes.textField} fullWidth
-              label="Total win" value={user.total_win || ''} variant="outlined"
+              label="Total win" value={user.total_win} variant="outlined"
             />
             <TextField
               InputProps={{ readOnly: true }} className={classes.textField} fullWidth
