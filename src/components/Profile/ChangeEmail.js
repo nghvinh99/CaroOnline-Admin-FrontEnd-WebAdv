@@ -9,7 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { useDispatch } from 'react-redux';
-import { changePassword } from '../../features/admin/adminSlice';
+import { changeEmail } from '../../features/admin/adminSlice';
 import { useState } from 'react';
 
 function Alert(props) {
@@ -18,26 +18,30 @@ function Alert(props) {
 
 export default function ChangPassword({ open, handleClose, userId }) {
   const dispatch = useDispatch();
-  const [pass, setPass] = useState('');
-  const [conf, setConf] = useState('');
+  const [email, setEmail] = useState('');
   const [snack, setSnack] = useState(false);
-  const [warn, setWarn] = useState(false);
   const [blank, setBlank] = useState(false);
+  const [warn, setWarn] = useState(false);
+
+  const validateEmail = (email) => {
+    var re = /\S+@\S+/;
+    return re.test(email);
+  }
 
   const handleConfirm = () => {
-    if (!pass) {
+    if (!email) {
       setBlank(true);
       return;
     }
-    if (pass !== conf) {
+    if (!validateEmail(email)) {
       setWarn(true);
-      return
+      return;
     }
     const info = {
-      pass: pass,
+      email: email,
       id: userId
     }
-    dispatch(changePassword(info));
+    dispatch(changeEmail(info));
     handleDialogClose();
     handleSnackBarOpen();
   }
@@ -48,13 +52,12 @@ export default function ChangPassword({ open, handleClose, userId }) {
 
   const handleSnackBarClose = () => {
     setSnack(false);
-    setWarn(false);
     setBlank(false);
+    setWarn(false);
   }
 
   const handleDialogClose = () => {
-    setPass('');
-    setConf('');
+    setEmail('');
     handleClose();
   }
 
@@ -66,34 +69,29 @@ export default function ChangPassword({ open, handleClose, userId }) {
     <div>
       <Snackbar open={snack} autoHideDuration={3000} onClose={handleSnackBarClose}>
         <Alert onClose={handleSnackBarClose} severity="success">
-          Password changed successfully!
+          Email changed successfully!
         </Alert>
       </Snackbar>
       <Snackbar open={warn} autoHideDuration={3000} onClose={handleSnackBarClose}>
         <Alert onClose={handleSnackBarClose} severity="error">
-          Password not match!
+          Invalid email format!
         </Alert>
       </Snackbar>
       <Snackbar open={blank} autoHideDuration={3000} onClose={handleSnackBarClose}>
         <Alert onClose={handleSnackBarClose} severity="error">
-          Password must not blank!
+          Email must not blank!
         </Alert>
       </Snackbar>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" fullWidth>
         <DialogTitle id="form-dialog-title">Change password</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Enter and confirm to change your password
+            Enter new email
           </DialogContentText>
           <TextField
             autoFocus margin="dense"
-            label="New password" type="password"
-            onChange={(event) => handleInput(event, setPass)}
-            fullWidth
-          />
-          <TextField
-            margin="dense" label="Confirm password"
-            type="password" onChange={(event) => handleInput(event, setConf)}
+            label="New email" type="email"
+            onChange={(event) => handleInput(event, setEmail)}
             fullWidth
           />
         </DialogContent>

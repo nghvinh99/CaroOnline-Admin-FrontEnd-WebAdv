@@ -25,8 +25,15 @@ function App() {
   return (
     <AuthContext.Provider value={{ auth: auth, login: login, logout: logout, check: check }}>
       <Router>
-        <Route exact path='/auth/sign-in' component={SignInPage} />
-
+        <Route exact path='/auth/sign-in'>
+          <SignInPage content='SignIn' />
+        </Route>
+        <Route exact path='/auth/forgot-password'>
+          <SignInPage content='Forgot' />
+        </Route>
+        <Route exact path='/auth/reset/:token'>
+          <SignInPage content='Reset' />
+        </Route>
         <Route exact path='/dashboard'>
           <Dashboard content='Home' />
         </Route>

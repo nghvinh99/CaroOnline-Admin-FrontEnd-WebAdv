@@ -21,10 +21,9 @@ export const useStyles = makeStyles((theme) => ({
   },
   password: {
     margin: theme.spacing(1),
+    width: "70%"
   },
   button: {
-    margin: theme.spacing(1),
-    marginTop: theme.spacing(3)
-    // height: "50px"
+    margin: theme.spacing(2),
   }
 }))

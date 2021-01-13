@@ -4,9 +4,10 @@ import TextField from '@material-ui/core/TextField';
 import Title from '../Title';
 import ChangePassword from './ChangePassword';
 import ProfileImage from './ProfileImage';
-import Button from '@material-ui/core/Button';
-import AutorenewIcon from '@material-ui/icons/Autorenew';
+import ChangeEmail from './ChangeEmail';
+import EditIcon from '@material-ui/icons/Edit';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import IconButton from '@material-ui/core/IconButton';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProfile, selectAdmin } from '../../features/admin/adminSlice';
 import { useEffect, useState } from 'react';
@@ -18,6 +19,7 @@ export default function UserDetails() {
   const admin = useSelector(selectAdmin);
   const state = useSelector(state => state.admin.state);
   const [open, setOpen] = useState(false);
+  const [openE, setOpenE] = useState(false);
 
   const id = 1;
 
@@ -25,10 +27,17 @@ export default function UserDetails() {
     dispatch(fetchProfile(id));
   }, [dispatch])
 
+  const handleClickOpenE = () => {
+    setOpenE(true);
+  };
+
   const handleClickOpen = () => {
     setOpen(true);
   };
 
+  const handleCloseE = () => {
+    setOpenE(false);
+  };
   const handleClose = () => {
     setOpen(false);
   };
@@ -40,6 +49,11 @@ export default function UserDetails() {
       <ChangePassword
         open={open}
         handleClose={handleClose}
+        userId={id}
+      />
+      <ChangeEmail
+        open={openE}
+        handleClose={handleCloseE}
         userId={id}
       />
       <Title>Users</Title>
@@ -62,14 +76,18 @@ export default function UserDetails() {
               InputProps={{ readOnly: true }} className={classes.password}
               label="Password" value="**********" variant="outlined"
             />
-            <Button
-              variant="contained"
-              color="default"
-              onClick={handleClickOpen}
-              className={classes.button}
-              startIcon={<AutorenewIcon />}>
-              Change
-          </Button>
+            <IconButton aria-label="edit" className={classes.button}
+              onClick={handleClickOpen}>
+              <EditIcon />
+            </IconButton>
+            <TextField
+              InputProps={{ readOnly: true }} className={classes.password}
+              label="Email" value={admin.email || ''} variant="outlined"
+            />
+            <IconButton aria-label="edit" className={classes.button}
+              onClick={handleClickOpenE}>
+              <EditIcon />
+            </IconButton>
             <TextField
               InputProps={{ readOnly: true }} className={classes.textField}
               label="Created at" value={(admin.createdAt.split("T")[0]) || ''} variant="outlined"

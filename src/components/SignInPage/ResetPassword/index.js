@@ -6,92 +6,93 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Alert from '@material-ui/lab/Alert';
 import Typography from '@material-ui/core/Typography';
 import { useState, useContext, useEffect } from 'react';
-import { adminLogin } from '../../../features/admin/adminSlice';
+import { resetPassword } from '../../../features/admin/adminSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { AuthContext } from '../../../context/auth';
 import { useStyles } from '../styles';
 
 export default function SignInForm() {
   const classes = useStyles();
-  const auth = useContext(AuthContext);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const { token } = useParams();
+  const [pass, setPass] = useState('');
+  const [confPass, setConfPass] = useState('');
 
   const [waiting, setWaiting] = useState(false);
   const [invalid, setInvalid] = useState(false);
+  const [invalidToken, setInvalidToken] = useState(false);
 
   const dispatch = useDispatch();
-  const adminStatus = useSelector(state => state.admin.status);
-  const loginState = useSelector(state => state.admin.state);
+  const state = useSelector(state => state.admin.state);
 
-  const usernameInput = (e) => {
-    setUsername(e.target.value);
-  }
-
-  const passwordInput = (e) => {
-    setPassword(e.target.value);
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const user = {
-      username: username,
-      password: password
-    }
-    if (adminStatus === 'idle') {
-      dispatch(adminLogin(user));
-    }
+  const input = (e, setState) => {
+    setState(e.target.value);
   }
 
   useEffect(() => {
-    if (loginState === 'Pending') {
-      setInvalid(false);
+    if (state === "OK") {
+      window.location.href = '/auth/sign-in'
+    }
+    if (state === "Pending") {
       setWaiting(true);
     } else {
       setWaiting(false);
     }
-    if (loginState === 'Unauthorized') {
-      setInvalid(true);
-    } else if (loginState === 'OK') {
-      auth.login();
-      window.location.href = '/dashboard';
+    if (state === "Failed") {
+      setInvalidToken(true);
     }
-  }, [loginState])
+  })
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setInvalid(false);
+    if (pass === confPass) {
+      const info = {
+        password: pass,
+        token: token
+      }
+      dispatch(resetPassword(info))
+    } else {
+      setInvalid(true);
+    }
+  }
 
   return (
     <>
       <Typography component="h1" variant="h5">
-        Sign in
+        Reset password
         </Typography>
       <form className={classes.form} onSubmit={handleSubmit}>
         {waiting ? <LinearProgress /> : ""}
         {invalid ?
           <Alert severity="error">
-            Invalid username or password!
+            Password not match
+        </Alert> : ""}
+        {invalidToken ?
+          <Alert severity="error">
+            Invalid token!
         </Alert> : ""}
         <TextField
           variant="outlined" margin="normal" required fullWidth
-          id="email" label="Username" name="email" autoComplete="email"
-          autoFocus onChange={usernameInput}
+          label="New password" type="password"
+          autoFocus onChange={(e) => input(e, setPass)}
         />
         <TextField
           variant="outlined" margin="normal" required fullWidth
-          name="password" label="Password" type="password" id="password"
-          autoComplete="current-password"
-          onChange={passwordInput}
+          label="Confirm password" type="password"
+          onChange={(e) => input(e, setConfPass)}
         />
-
         <Button
           type="submit" fullWidth variant="contained"
           color="primary" className={classes.submit}
         >
-          Sign In
+          Change
       </Button>
 
         <Grid container>
           <Grid item xs>
-            <Link href="/auth/forgot-password" variant="body2">
-              Forgot password?
+            <Link href="/auth/sign-in" variant="body2">
+              Sign in
               </Link>
           </Grid>
         </Grid>

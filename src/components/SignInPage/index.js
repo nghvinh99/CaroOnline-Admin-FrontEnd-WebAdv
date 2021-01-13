@@ -5,11 +5,12 @@ import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Copyright from '../Copyright';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
 import SignInForm from './SignInForm';
+import ForgotPassword from './ForgotPassword';
+import ResetPassword from './ResetPassword';
 import { useStyles } from './styles';
 
-export default function SignInPage() {
+export default function SignInPage({ content }) {
   const classes = useStyles();
 
   return (
@@ -19,10 +20,11 @@ export default function SignInPage() {
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <SignInForm />
+        {content === 'SignIn' ?
+          <SignInForm /> :
+          content === 'Forgot' ?
+            <ForgotPassword /> : <ResetPassword />
+        }
       </div>
       <Box mt={8}>
         <Copyright />
